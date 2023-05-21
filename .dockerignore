@@ -1,0 +1,9 @@
+__admin/
+docs/
+.nuke/
+.github/
+.idea/
+.vscode/
+tests/
+.gitignore
+docker-compose.yml
