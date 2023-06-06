@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Firma.Models.Values.Legal
 {
-    public class NaturezaJuridica
+    public class LegalNature
     {
         public int Id { get; set; }
-        public string Codigo { get; set; } = String.Empty;
-        public string Descricao { get; set; } = String.Empty;
+        public string Code { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
     }
 }

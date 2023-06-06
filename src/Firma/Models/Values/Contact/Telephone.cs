@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Firma.Models.Values.Contatos
+namespace Firma.Models.Values.Contact
 {
-    public class Telefone
+    public class Telephone
     {
         public int Id { get; set; }
         public required string DDD { get; set; }
-        public required string Numero { get; set; }
+        public required string Number { get; set; }
     }
 }
