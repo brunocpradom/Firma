@@ -18,8 +18,6 @@ namespace Firma.Models.Entities
         public AgeGroup? AgeGroup { get; set; }
         public DateOnly CompanyJoiningDate { get; set; }
         public Country? Country { get; set; }
-
-
         public string LegalRepresentative { get; set; } = String.Empty;
         public string RepresentativeName { get; set; } = String.Empty;
         public string RepresentativeQualification { get; set; } = String.Empty;

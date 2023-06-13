@@ -17,8 +17,8 @@ namespace Firma.Models.Entities
         public string? TradeName { get; set; }
         public DateOnly ActivityStartDate { get; set; }
         public required CadastralSituation CadastralSituation { get; set; }
-        public required Cnae MainCnae { get; set; }
-        public List<Cnae>? SecondaryCnaes { get; set; } //manytomany
+        public required MainCnae MainCnae { get; set; }
+        public SecondaryCnaes? SecondaryCnaes { get; set; } 
         public required Adress Adress { get; set; }
         public List<Telephone>? Telephone { get; set; }
         public List<Email>? Email { get; set; }

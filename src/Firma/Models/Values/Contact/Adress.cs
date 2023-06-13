@@ -9,7 +9,7 @@ namespace Firma.Models.Values.Contact
     {
         public int Id { get; set; }
         public string ForeignCityName { get; set; } = String.Empty;
-        public string Country { get; set; } = String.Empty;
+        public required Country Country { get; set; }
         public string StreetType { get; set; } = String.Empty;
         public string StreetAddress { get; set; } = String.Empty;
         public string Number { get; set; } = String.Empty;
@@ -17,6 +17,6 @@ namespace Firma.Models.Values.Contact
         public string Neighborhood { get; set; } = String.Empty;
         public string ZipCode { get; set; } = String.Empty;
         public string State { get; set; } = String.Empty;
-        public string City { get; set; } = String.Empty;
+        public required City City { get; set; }
     }
 }
