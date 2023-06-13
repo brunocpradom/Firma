@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.IO.Compression;
 using Microsoft.VisualBasic.FileIO;
+using System.Text;
 
 namespace Firma.Services
 {
@@ -24,7 +25,7 @@ namespace Firma.Services
             foreach(string link in links)
             {
                 var destinationPath = await _rfClient.DownloadFile(link, destinationDirectory);
-                ZipFile.ExtractToDirectory(destinationPath, destinationDirectory);
+                ZipFile.ExtractToDirectory(destinationPath, destinationDirectory, Encoding.GetEncoding(28591));
                 File.Delete(destinationPath);
             }
             return destinationDirectory;
