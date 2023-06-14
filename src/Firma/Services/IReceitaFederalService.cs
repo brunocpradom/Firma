@@ -7,7 +7,7 @@ namespace Firma.Services
 {
     public interface IReceitaFederalService
     {
-        Task<string> DataDownload(IEnumerable<string> links);
+        Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory);
         Task<string> EstablishmentDataDownload(); 
         Task<string> CompanyDataDownload();
         Task<string> PartnerDataDownload();

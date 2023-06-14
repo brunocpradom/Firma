@@ -7,6 +7,6 @@ namespace Firma.Services
 {
     public interface ICsvParserService
     {
-        public string ProcessaCsvCnaes();
+        public IEnumerable<CsvDto> ProcessCsv<CsvDto>(string pathDirectory);
     }
 }

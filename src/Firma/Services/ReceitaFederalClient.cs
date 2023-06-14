@@ -33,66 +33,6 @@ namespace Firma.Services
             return await GetLinks($"{_baseUrl}regime_tributario/");
         }
 
-        public async Task<IEnumerable<string>> GetCompanyLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Empresa"));
-        }
-
-        public async Task<IEnumerable<string>> GetEstablishmentsLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Estabelecimento"));
-        }
-
-        public async Task<IEnumerable<string>> GetPartnerLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Socio"));
-        }
-
-        public async Task<IEnumerable<string>> GetCnaesLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Cnae"));
-        }
-
-        public async Task<IEnumerable<string>> GetCityLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Municipio"));
-        }
-
-        public async Task<IEnumerable<string>> GetLegalNatureLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Natureza"));
-        }
-
-        public async Task<IEnumerable<string>> GetCountriesLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Pais"));
-        }
-
-        public async Task<IEnumerable<string>> GetQualificationsLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Qualifica"));
-        }
-
-        public async Task<IEnumerable<string>> GetSimplesLink()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Empresa"));
-        }
-
-        public async Task<IEnumerable<string>> GetMotivesLinks()
-        {
-            var mainLinks = await GetMainLinks();
-            return mainLinks.Where(l => l.Contains("Motivo"));
-        }
-
         public async Task<string> DownloadFile(string link, string destinationDirectory)
         {
             var fileName = link.Split("/").Last();

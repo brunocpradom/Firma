@@ -18,10 +18,8 @@ namespace Firma.Services
             _rfClient = rfClient;
         }
 
-        public async Task<string> DataDownload(IEnumerable<string> links)
+        public async Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory)
         {
-            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp");
-            
             foreach(string link in links)
             {
                 var destinationPath = await _rfClient.DownloadFile(link, destinationDirectory);
@@ -32,78 +30,99 @@ namespace Firma.Services
         }
         public async Task<string> CnaesDataDownload()
         {
-            var cnaeLinks = await _rfClient.GetCnaesLinks();
-            var destinationDirectory = await DataDownload(cnaeLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "cnae");
+            var links = await _rfClient.GetMainLinks();
+            var cnaeLinks = links.Where(l => l.Contains("Cnae"));
+            await DataDownload(cnaeLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> CompanyDataDownload()
         {
-            var empresasLinks = await _rfClient.GetCompanyLinks();
-            var destinationDirectory = await DataDownload(empresasLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "company");
+            var links = await _rfClient.GetMainLinks();
+            var companyLinks = links.Where(l => l.Contains("Empresa"));
+            await DataDownload(companyLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> EstablishmentDataDownload()
         {
-            var estabelecimentosLinks = await _rfClient.GetEstablishmentsLinks();
-            var destinationDirectory = await DataDownload(estabelecimentosLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "establishment");
+            var links = await _rfClient.GetMainLinks();
+            var establishmentsLinks = links.Where(l => l.Contains("Estabelecimento"));
+            await DataDownload(establishmentsLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> MotivesDataDownload()
         {
-            var motivosLinks = await _rfClient.GetMotivesLinks();
-            var destinationDirectory = await DataDownload(motivosLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "others");
+            var links = await _rfClient.GetMainLinks();
+            var motivesLinks = links.Where(l => l.Contains("Motivo"));
+            await DataDownload(motivesLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> CityDataDownload()
         {
-            var municipiosLinks = await _rfClient.GetCityLinks();
-            var destinationDirectory = await DataDownload(municipiosLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "others");
+            var links = await _rfClient.GetMainLinks();
+            var cityLinks = links.Where(l => l.Contains("Municipio"));
+            await DataDownload(cityLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> LegalNatureDownload()
         {
-            var naturezaJuridicaLinks = await _rfClient.GetLegalNatureLinks();
-            var destinationDirectory = await DataDownload(naturezaJuridicaLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "legal");
+            var links = await _rfClient.GetMainLinks();
+            var legalNatureLinks = links.Where(l => l.Contains("Natureza"));
+            await DataDownload(legalNatureLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> CountryDataDownload()
         {
-            var paisesLinks = await _rfClient.GetCountriesLinks();
-            var destinationDirectory = await DataDownload(paisesLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "others");
+            var links = await _rfClient.GetMainLinks();
+            var countryLinks = links.Where(l => l.Contains("Pais"));
+            await DataDownload(countryLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> QualificationsDataDownload()
         {
-            var qualificacoesLinks = await _rfClient.GetQualificationsLinks();
-            var destinationDirectory = await DataDownload(qualificacoesLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "others");
+            var links = await _rfClient.GetMainLinks();
+            var qualificationsLinks = links.Where(l => l.Contains("Qualifica"));
+            await DataDownload(qualificationsLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> TaxRegimeDownload()
         {
-            var regimeTributariosLinks = await _rfClient.GetTaxRegimeLinks();
-            var destinationDirectory = await DataDownload(regimeTributariosLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "legal");
+            var taxRegimeLinks = await _rfClient.GetTaxRegimeLinks();
+            await DataDownload(taxRegimeLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> SimplesDataDownload()
         {
-            var simplesLinks = await _rfClient.GetSimplesLink();
-            var destinationDirectory = await DataDownload(simplesLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "legal");
+            var links = await _rfClient.GetMainLinks();
+            var simplesLinks = links.Where(l => l.Contains("Simples"));
+            await DataDownload(simplesLinks, destinationDirectory);
             return  destinationDirectory;
         }
 
         public async Task<string> PartnerDataDownload()
         {
-            var sociosLinks = await _rfClient.GetPartnerLinks();
-            var destinationDirectory = await DataDownload(sociosLinks);
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "partner");
+            var links = await _rfClient.GetMainLinks();
+            var partnerLinks = links.Where(l => l.Contains("Socio"));
+            await DataDownload(partnerLinks, destinationDirectory);
             return  destinationDirectory;
         }
     }
