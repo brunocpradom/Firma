@@ -8,18 +8,19 @@ using CsvHelper.Configuration;
 using System.Globalization;
 using Firma.Dtos.Csv;
 using System.Text;
+using Firma.Factories;
+using Firma.Models.Values.Legal;
 
 namespace Firma.Services
 {
     public class CsvParserService : ICsvParserService
     {
-        public string ProcessaCsvCnaes()
+        public IEnumerable<CsvDto> ProcessCsv<CsvDto>(string pathDirectory)
         {
-            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp");
-            var files = Directory.GetFiles(destinationDirectory);
+            
+            var files = Directory.GetFiles(pathDirectory);
             foreach(var file in files)
             {
-                Console.WriteLine(file);
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
                     HasHeaderRecord = false,
@@ -27,17 +28,13 @@ namespace Firma.Services
                 };
                 var reader = new StreamReader(file, Encoding.GetEncoding(28591));
                 var csv = new CsvReader(reader, config);
-                var atendimentos = csv.GetRecords<CnaeCsvDto>();
-                foreach(var atendimento in atendimentos)
-                {
-                    Console.WriteLine(atendimento.Code);
-                    Console.WriteLine(atendimento.Description);
-                }
-            }
-            return "";
-            
+                var records = csv.GetRecords<CsvDto>();
 
-            
+                foreach(var record in records)
+                {
+                    yield return record;
+                }
+            }          
         }
     }
 }
