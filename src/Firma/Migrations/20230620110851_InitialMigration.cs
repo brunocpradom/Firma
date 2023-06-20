@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Firma.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "age_group",
+                name: "cadastral_situation_reason",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -23,25 +23,7 @@ namespace Firma.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_age_group", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "cadastral_situation",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    code = table.Column<string>(type: "text", nullable: false),
-                    situation = table.Column<int>(type: "integer", nullable: false),
-                    cadastral_situation_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    cadastral_situation_reason = table.Column<string>(type: "text", nullable: false),
-                    special_situation = table.Column<string>(type: "text", nullable: false),
-                    special_situation_date = table.Column<DateOnly>(type: "date", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_cadastral_situation", x => x.id);
+                    table.PrimaryKey("pk_cadastral_situation_reason", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -248,7 +230,7 @@ namespace Firma.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     document_number = table.Column<string>(type: "text", nullable: false),
                     qualification_id = table.Column<int>(type: "integer", nullable: true),
-                    age_group_id = table.Column<int>(type: "integer", nullable: true),
+                    age_group = table.Column<int>(type: "integer", nullable: true),
                     company_joining_date = table.Column<DateOnly>(type: "date", nullable: false),
                     country_id = table.Column<int>(type: "integer", nullable: true),
                     legal_representative = table.Column<string>(type: "text", nullable: false),
@@ -258,11 +240,6 @@ namespace Firma.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_partner", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_partner_age_group_age_group_id",
-                        column: x => x.age_group_id,
-                        principalTable: "age_group",
-                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_partner_company_company_id",
                         column: x => x.company_id,
@@ -348,25 +325,18 @@ namespace Firma.Migrations
                     identifier = table.Column<int>(type: "integer", nullable: false),
                     trade_name = table.Column<string>(type: "text", nullable: true),
                     activity_start_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    cadastral_situation_id = table.Column<int>(type: "integer", nullable: false),
                     main_cnae_id = table.Column<int>(type: "integer", nullable: false),
                     secondary_cnaes_id = table.Column<int>(type: "integer", nullable: true),
-                    adress_id = table.Column<int>(type: "integer", nullable: false),
+                    address_id = table.Column<int>(type: "integer", nullable: false),
                     cnae_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_establishment", x => x.id);
                     table.ForeignKey(
-                        name: "fk_establishment_adress_adress_id",
-                        column: x => x.adress_id,
+                        name: "fk_establishment_adress_address_id",
+                        column: x => x.address_id,
                         principalTable: "adress",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_establishment_cadastral_situation_cadastral_situation_id",
-                        column: x => x.cadastral_situation_id,
-                        principalTable: "cadastral_situation",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -394,13 +364,43 @@ namespace Firma.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "cadastral_situation",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    establishment_id = table.Column<int>(type: "integer", nullable: false),
+                    situation = table.Column<int>(type: "integer", nullable: false),
+                    cadastral_situation_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    cadastral_situation_reason_id = table.Column<int>(type: "integer", nullable: false),
+                    special_situation = table.Column<string>(type: "text", nullable: false),
+                    special_situation_date = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_cadastral_situation", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_cadastral_situation_cadastral_situation_reason_cadastral_sit",
+                        column: x => x.cadastral_situation_reason_id,
+                        principalTable: "cadastral_situation_reason",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_cadastral_situation_establishment_establishment_id",
+                        column: x => x.establishment_id,
+                        principalTable: "establishment",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "email",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    address = table.Column<string>(type: "text", nullable: false),
-                    establishment_id = table.Column<int>(type: "integer", nullable: true)
+                    establishment_id = table.Column<int>(type: "integer", nullable: false),
+                    address = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -409,7 +409,8 @@ namespace Firma.Migrations
                         name: "fk_email_establishment_establishment_id",
                         column: x => x.establishment_id,
                         principalTable: "establishment",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -418,9 +419,9 @@ namespace Firma.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    establishment_id = table.Column<int>(type: "integer", nullable: false),
                     ddd = table.Column<string>(type: "text", nullable: false),
-                    number = table.Column<string>(type: "text", nullable: false),
-                    establishment_id = table.Column<int>(type: "integer", nullable: true)
+                    number = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -429,7 +430,8 @@ namespace Firma.Migrations
                         name: "fk_telephone_establishment_establishment_id",
                         column: x => x.establishment_id,
                         principalTable: "establishment",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -441,6 +443,17 @@ namespace Firma.Migrations
                 name: "ix_adress_country_id",
                 table: "adress",
                 column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_cadastral_situation_cadastral_situation_reason_id",
+                table: "cadastral_situation",
+                column: "cadastral_situation_reason_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_cadastral_situation_establishment_id",
+                table: "cadastral_situation",
+                column: "establishment_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_cnae_secondary_cnaes_id",
@@ -458,14 +471,9 @@ namespace Firma.Migrations
                 column: "establishment_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_establishment_adress_id",
+                name: "ix_establishment_address_id",
                 table: "establishment",
-                column: "adress_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_establishment_cadastral_situation_id",
-                table: "establishment",
-                column: "cadastral_situation_id");
+                column: "address_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_establishment_cnae_id",
@@ -491,11 +499,6 @@ namespace Firma.Migrations
                 name: "ix_main_cnae_cnae_id",
                 table: "main_cnae",
                 column: "cnae_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_partner_age_group_id",
-                table: "partner",
-                column: "age_group_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_partner_company_id",
@@ -543,6 +546,9 @@ namespace Firma.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "cadastral_situation");
+
+            migrationBuilder.DropTable(
                 name: "email");
 
             migrationBuilder.DropTable(
@@ -555,7 +561,7 @@ namespace Firma.Migrations
                 name: "telephone");
 
             migrationBuilder.DropTable(
-                name: "age_group");
+                name: "cadastral_situation_reason");
 
             migrationBuilder.DropTable(
                 name: "qualification");
@@ -574,9 +580,6 @@ namespace Firma.Migrations
 
             migrationBuilder.DropTable(
                 name: "adress");
-
-            migrationBuilder.DropTable(
-                name: "cadastral_situation");
 
             migrationBuilder.DropTable(
                 name: "company");

@@ -23,7 +23,7 @@ namespace Firma.Data
         public DbSet<Establishment> Establishment => Set<Establishment>();
         public DbSet<Company> Company => Set<Company>();
         public DbSet<Partner> Partner => Set<Partner>();
-        public DbSet<Adress> Adress => Set<Adress>();
+        public DbSet<Address> Adress => Set<Address>();
         public DbSet<City> City => Set<City>();
         public DbSet<Country> Country => Set<Country>();
         public DbSet<Email> Email => Set<Email>();
@@ -31,11 +31,13 @@ namespace Firma.Data
         public DbSet<Telephone> Telephone => Set<Telephone>();
         public DbSet<CadastralSituation> CadastralSituation => Set<CadastralSituation>();  
         public DbSet<LegalNature> LegalNature => Set<LegalNature>(); 
-        public DbSet<AgeGroup> AgeGroup => Set<AgeGroup>(); 
         public DbSet<Qualification> Qualification => Set<Qualification>(); 
         public DbSet<Lucro> Lucro => Set<Lucro>();
         public DbSet<Mei> Mei => Set<Mei>();
         public DbSet<Simples> Simples => Set<Simples>();
         public DbSet<TaxRegime> TaxRegime => Set<TaxRegime>();
+        public DbSet<MainCnae> MainCnae => Set<MainCnae>();
+        public DbSet<SecondaryCnaes> SecondaryCnaes => Set<SecondaryCnaes>();
+        public DbSet<CadastralSituationReason> CadastralSituationReason => Set<CadastralSituationReason>();
     }
 }

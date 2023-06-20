@@ -83,13 +83,9 @@ namespace Firma.Migrations
                         .HasColumnType("date")
                         .HasColumnName("activity_start_date");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("integer")
-                        .HasColumnName("adress_id");
-
-                    b.Property<int>("CadastralSituationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("cadastral_situation_id");
+                        .HasColumnName("address_id");
 
                     b.Property<int?>("CnaeId")
                         .HasColumnType("integer")
@@ -123,11 +119,8 @@ namespace Firma.Migrations
                     b.HasKey("Id")
                         .HasName("pk_establishment");
 
-                    b.HasIndex("AdressId")
-                        .HasDatabaseName("ix_establishment_adress_id");
-
-                    b.HasIndex("CadastralSituationId")
-                        .HasDatabaseName("ix_establishment_cadastral_situation_id");
+                    b.HasIndex("AddressId")
+                        .HasDatabaseName("ix_establishment_address_id");
 
                     b.HasIndex("CnaeId")
                         .HasDatabaseName("ix_establishment_cnae_id");
@@ -153,9 +146,9 @@ namespace Firma.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AgeGroupId")
+                    b.Property<int?>("AgeGroup")
                         .HasColumnType("integer")
-                        .HasColumnName("age_group_id");
+                        .HasColumnName("age_group");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer")
@@ -205,9 +198,6 @@ namespace Firma.Migrations
                     b.HasKey("Id")
                         .HasName("pk_partner");
 
-                    b.HasIndex("AgeGroupId")
-                        .HasDatabaseName("ix_partner_age_group_id");
-
                     b.HasIndex("CompanyId")
                         .HasDatabaseName("ix_partner_company_id");
 
@@ -220,7 +210,32 @@ namespace Firma.Migrations
                     b.ToTable("partner", (string)null);
                 });
 
-            modelBuilder.Entity("Firma.Models.Values.Contact.Adress", b =>
+            modelBuilder.Entity("Firma.Models.Values.Companies.CadastralSituationReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.HasKey("Id")
+                        .HasName("pk_cadastral_situation_reason");
+
+                    b.ToTable("cadastral_situation_reason", (string)null);
+                });
+
+            modelBuilder.Entity("Firma.Models.Values.Contact.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -353,7 +368,7 @@ namespace Firma.Migrations
                         .HasColumnType("text")
                         .HasColumnName("address");
 
-                    b.Property<int?>("EstablishmentId")
+                    b.Property<int>("EstablishmentId")
                         .HasColumnType("integer")
                         .HasColumnName("establishment_id");
 
@@ -380,7 +395,7 @@ namespace Firma.Migrations
                         .HasColumnType("text")
                         .HasColumnName("ddd");
 
-                    b.Property<int?>("EstablishmentId")
+                    b.Property<int>("EstablishmentId")
                         .HasColumnType("integer")
                         .HasColumnName("establishment_id");
 
@@ -411,15 +426,13 @@ namespace Firma.Migrations
                         .HasColumnType("date")
                         .HasColumnName("cadastral_situation_date");
 
-                    b.Property<string>("CadastralSituationReason")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("cadastral_situation_reason");
+                    b.Property<int>("CadastralSituationReasonId")
+                        .HasColumnType("integer")
+                        .HasColumnName("cadastral_situation_reason_id");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("code");
+                    b.Property<int>("EstablishmentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("establishment_id");
 
                     b.Property<int>("Situation")
                         .HasColumnType("integer")
@@ -436,6 +449,13 @@ namespace Firma.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_cadastral_situation");
+
+                    b.HasIndex("CadastralSituationReasonId")
+                        .HasDatabaseName("ix_cadastral_situation_cadastral_situation_reason_id");
+
+                    b.HasIndex("EstablishmentId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_cadastral_situation_establishment_id");
 
                     b.ToTable("cadastral_situation", (string)null);
                 });
@@ -532,31 +552,6 @@ namespace Firma.Migrations
                         .HasName("pk_secondary_cnaes");
 
                     b.ToTable("secondary_cnaes", (string)null);
-                });
-
-            modelBuilder.Entity("Firma.Models.Values.Partner.AgeGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.HasKey("Id")
-                        .HasName("pk_age_group");
-
-                    b.ToTable("age_group", (string)null);
                 });
 
             modelBuilder.Entity("Firma.Models.Values.Partner.Qualification", b =>
@@ -729,19 +724,12 @@ namespace Firma.Migrations
 
             modelBuilder.Entity("Firma.Models.Entities.Establishment", b =>
                 {
-                    b.HasOne("Firma.Models.Values.Contact.Adress", "Adress")
+                    b.HasOne("Firma.Models.Values.Contact.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_establishment_adress_adress_id");
-
-                    b.HasOne("Firma.Models.Values.Legal.CadastralSituation", "CadastralSituation")
-                        .WithMany()
-                        .HasForeignKey("CadastralSituationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_establishment_cadastral_situation_cadastral_situation_id");
+                        .HasConstraintName("fk_establishment_adress_address_id");
 
                     b.HasOne("Firma.Models.Values.Legal.Cnae", null)
                         .WithMany("Estabelecimentos")
@@ -767,9 +755,7 @@ namespace Firma.Migrations
                         .HasForeignKey("SecondaryCnaesId")
                         .HasConstraintName("fk_establishment_secondary_cnaes_secondary_cnaes_id");
 
-                    b.Navigation("Adress");
-
-                    b.Navigation("CadastralSituation");
+                    b.Navigation("Address");
 
                     b.Navigation("Company");
 
@@ -780,11 +766,6 @@ namespace Firma.Migrations
 
             modelBuilder.Entity("Firma.Models.Entities.Partner", b =>
                 {
-                    b.HasOne("Firma.Models.Values.Partner.AgeGroup", "AgeGroup")
-                        .WithMany()
-                        .HasForeignKey("AgeGroupId")
-                        .HasConstraintName("fk_partner_age_group_age_group_id");
-
                     b.HasOne("Firma.Models.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
@@ -802,8 +783,6 @@ namespace Firma.Migrations
                         .HasForeignKey("QualificationId")
                         .HasConstraintName("fk_partner_qualification_qualification_id");
 
-                    b.Navigation("AgeGroup");
-
                     b.Navigation("Company");
 
                     b.Navigation("Country");
@@ -811,7 +790,7 @@ namespace Firma.Migrations
                     b.Navigation("Qualification");
                 });
 
-            modelBuilder.Entity("Firma.Models.Values.Contact.Adress", b =>
+            modelBuilder.Entity("Firma.Models.Values.Contact.Address", b =>
                 {
                     b.HasOne("Firma.Models.Values.Contact.City", "City")
                         .WithMany()
@@ -834,18 +813,47 @@ namespace Firma.Migrations
 
             modelBuilder.Entity("Firma.Models.Values.Contact.Email", b =>
                 {
-                    b.HasOne("Firma.Models.Entities.Establishment", null)
+                    b.HasOne("Firma.Models.Entities.Establishment", "Establishment")
                         .WithMany("Email")
                         .HasForeignKey("EstablishmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_email_establishment_establishment_id");
+
+                    b.Navigation("Establishment");
                 });
 
             modelBuilder.Entity("Firma.Models.Values.Contact.Telephone", b =>
                 {
-                    b.HasOne("Firma.Models.Entities.Establishment", null)
+                    b.HasOne("Firma.Models.Entities.Establishment", "Establishment")
                         .WithMany("Telephone")
                         .HasForeignKey("EstablishmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_telephone_establishment_establishment_id");
+
+                    b.Navigation("Establishment");
+                });
+
+            modelBuilder.Entity("Firma.Models.Values.Legal.CadastralSituation", b =>
+                {
+                    b.HasOne("Firma.Models.Values.Companies.CadastralSituationReason", "CadastralSituationReason")
+                        .WithMany()
+                        .HasForeignKey("CadastralSituationReasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cadastral_situation_cadastral_situation_reason_cadastral_sit");
+
+                    b.HasOne("Firma.Models.Entities.Establishment", "Establishment")
+                        .WithOne("CadastralSituation")
+                        .HasForeignKey("Firma.Models.Values.Legal.CadastralSituation", "EstablishmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cadastral_situation_establishment_establishment_id");
+
+                    b.Navigation("CadastralSituationReason");
+
+                    b.Navigation("Establishment");
                 });
 
             modelBuilder.Entity("Firma.Models.Values.Legal.Cnae", b =>
@@ -909,6 +917,9 @@ namespace Firma.Migrations
 
             modelBuilder.Entity("Firma.Models.Entities.Establishment", b =>
                 {
+                    b.Navigation("CadastralSituation")
+                        .IsRequired();
+
                     b.Navigation("Email");
 
                     b.Navigation("Telephone");
