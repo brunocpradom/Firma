@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Firma.Models.Values.Contact
 {
-    public class Adress
+    public class Address
     {
         public int Id { get; set; }
         public string ForeignCityName { get; set; } = String.Empty;

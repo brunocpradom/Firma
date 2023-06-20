@@ -19,7 +19,7 @@ namespace Firma.Models.Entities
         public required CadastralSituation CadastralSituation { get; set; }
         public required MainCnae MainCnae { get; set; }
         public SecondaryCnaes? SecondaryCnaes { get; set; } 
-        public required Adress Adress { get; set; }
+        public required Address Address { get; set; }
         public List<Telephone>? Telephone { get; set; }
         public List<Email>? Email { get; set; }
 

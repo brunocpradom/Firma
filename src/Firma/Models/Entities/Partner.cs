@@ -11,7 +11,7 @@ namespace Firma.Models.Entities
     {
         public int Id { get; set; }
         public required Company Company { get; set; }
-        public required Identifier Identifier { get; set; }
+        public required PartnerIdentifier Identifier { get; set; }
         public string Name { get; set; } = String.Empty;
         public string DocumentNumber { get; set; } = String.Empty; // cpf ou cnpj
         public Qualification? Qualification { get; set; }
