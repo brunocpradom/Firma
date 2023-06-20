@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Firma.Data;
+using Firma.Dtos.Csv;
+using Firma.Models;
+using Firma.Models.Entities;
+using Firma.Models.Values.Companies;
+using Firma.Models.Values.Legal;
+using Firma.Models.Values.TaxationModel;
+using Firma.Services;
+using Microsoft.EntityFrameworkCore;
+
+namespace Firma.Managers
+{
+    public class CompanyManager
+    {
+        private DataContext _context;
+        private ICsvParserService _csvParser;
+        private IReceitaFederalService _receitaFederal;
+        private ILogger<ReceitaFederalClient> _logger;
+
+        public CompanyManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        {
+            _context = context;
+            _csvParser = csvParser;
+            _receitaFederal = receitaFederal;
+            _logger = logger;
+        }
+
+        private async void Update(CompanyCsvDto record)
+        {
+            
+        }
+        private async void Create(CompanyCsvDto record)
+        {
+            _logger.LogInformation("Creating Company.");
+            var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.LegalNature);
+            var company = new Company(){
+                BasicTaxId = record.BasicTaxId,
+                RegisteredName = record.RegisteredName,
+                LegalNature = legalNature!,
+                ShareCapital = record.ShareCapital,
+                CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), record.CompanySize!),
+                TaxRegime = new TaxRegime(){},
+                ResponsibleFederalEntity =record.ResponsibleFederalEntity,
+                QualificationOfPersonInCharge = (QualificationOfPersonInCharge)Enum.ToObject(typeof(QualificationOfPersonInCharge), record.QualificationOfPersonInCharge!)
+                
+            };
+            _context.Add(company);
+            await _context.SaveChangesAsync();
+        }
+        public async void ImportData()
+        {
+            var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Empresa);
+            foreach(var record in _csvParser.ProcessCsv<CompanyCsvDto>(destinationDirectory))
+            {
+                var company = await _context.Company.FirstOrDefaultAsync(c=> c.BasicTaxId == record.BasicTaxId);
+                if(company is null)
+                {
+                    Create(record);
+                }
+                else
+                {
+                    Update(record);
+                }
+            }
+            _receitaFederal.DeleteFiles(destinationDirectory);
+        }
+    }
+}
