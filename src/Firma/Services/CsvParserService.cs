@@ -8,19 +8,27 @@ using CsvHelper.Configuration;
 using System.Globalization;
 using Firma.Dtos.Csv;
 using System.Text;
-using Firma.Factories;
 using Firma.Models.Values.Legal;
 
 namespace Firma.Services
 {
     public class CsvParserService : ICsvParserService
     {
+        private ILogger<ReceitaFederalClient> _logger;
+
+        public CsvParserService(ILogger<ReceitaFederalClient> logger)
+        {
+            _logger = logger;
+        }
+
         public IEnumerable<CsvDto> ProcessCsv<CsvDto>(string pathDirectory)
         {
-            
+            _logger.LogInformation("Start csv parsing!");
+
             var files = Directory.GetFiles(pathDirectory);
             foreach(var file in files)
             {
+                _logger.LogInformation(file);
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
                     HasHeaderRecord = false,

@@ -8,7 +8,8 @@ using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Services
     .AddDbContext<DataContext>(options => 
     options

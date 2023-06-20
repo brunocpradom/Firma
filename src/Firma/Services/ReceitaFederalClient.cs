@@ -10,6 +10,12 @@ namespace Firma.Services
     public class ReceitaFederalClient : IReceitaFederalClient
     {
         private string _baseUrl =  "http://200.152.38.155/CNPJ/";
+        private ILogger<ReceitaFederalClient> _logger;
+
+        public ReceitaFederalClient(ILogger<ReceitaFederalClient> logger)
+        {
+            _logger = logger;
+        }
 
         public async Task<IEnumerable<string>> GetLinks(string url)
         {
@@ -35,6 +41,9 @@ namespace Firma.Services
 
         public async Task<string> DownloadFile(string link, string destinationDirectory)
         {
+            _logger.LogInformation("Download start!");
+            _logger.LogInformation($"DestinationDirectory : {destinationDirectory}");
+
             var fileName = link.Split("/").Last();
             var destinationPath = Path.Combine(destinationDirectory,fileName);
             
@@ -42,6 +51,8 @@ namespace Firma.Services
             var response = await httpClient.GetStreamAsync(link);
             var fileStream = new FileStream(@destinationPath, FileMode.OpenOrCreate);
             await response.CopyToAsync(fileStream);
+            
+            _logger.LogInformation("Download finished");
             fileStream.Dispose();
             return destinationPath;
             
