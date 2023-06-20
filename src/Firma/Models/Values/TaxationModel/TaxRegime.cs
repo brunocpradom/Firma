@@ -9,7 +9,7 @@ namespace Firma.Models.Values.TaxationModel
     public class TaxRegime
     {
         public int Id { get; set; }
-        public required Company Company { get; set; }
+        public Company? Company { get; set; }
         public int CompanyId { get; set; }
         public Mei? Mei { get; set; }
         public Simples? Simples { get; set; }

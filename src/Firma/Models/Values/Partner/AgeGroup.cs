@@ -1,15 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Firma.Models.Values.Partner
 {
-    public class AgeGroup
+    public enum AgeGroup : int
     {
-        public int Id { get; set; }
-        public required string Code { get; set; }
-        public required string Description { get; set; }
+        ZeroToTwelve = 1,
+        ThirteenToTwenty = 2,
+        TwentyOneToThirty = 3,
+        ThirtyOneToForty = 4,
+        FortyOneToFifty = 5,
+        FiftyOneToSixty = 6,
+        SixtyOneToSeventy = 7,
+        SeventyOneToEighty = 8,
+        OverEighty = 9,
+        DontApply = 0
     }
 }
 

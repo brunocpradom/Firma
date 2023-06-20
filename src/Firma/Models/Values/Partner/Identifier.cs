@@ -1,6 +1,6 @@
 namespace Firma.Models.Values.Partner
 {
-    public enum Identifier : int
+    public enum PartnerIdentifier : int
     {
         IndividualEntity = 1,
         LegalEntity = 2,
