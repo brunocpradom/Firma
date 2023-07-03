@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class EstablishmentsManager
+    public class EstablishmentsManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -29,7 +29,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(EstablishmentCsvDto record)
+        private async Task Update(EstablishmentCsvDto record)
         {
             //todo- criar logica de update
             var taxId = $"{record.BasicTaxId}{record.OrderTaxId}{record.DVTaxId}";
@@ -118,7 +118,7 @@ namespace Firma.Managers
             return telephones;
         }
 
-        private async void Create(EstablishmentCsvDto record)
+        private async Task Create(EstablishmentCsvDto record)
         {
             _logger.LogInformation("Creating Establishment.");
             MainCnae mainCnae = await CreateMainCnae(record);
@@ -147,7 +147,7 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Estabelecimento);
             foreach(var record in _csvParser.ProcessCsv<EstablishmentCsvDto>(destinationDirectory))
@@ -157,11 +157,11 @@ namespace Firma.Managers
                 
                 if(establishment is null)
                 {
-                    Create(record);
+                    await Create(record);
                 }
                 else
                 {
-                    Update(record);
+                    await Update(record);
                 }
             }
             _receitaFederal.DeleteFiles(destinationDirectory);

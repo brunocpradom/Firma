@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CnaeManager
+    public class CnaeManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _cnaeCsvParser;
@@ -26,7 +26,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             _logger.LogInformation("Creating Cnae");
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Cnae);

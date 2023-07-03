@@ -12,7 +12,7 @@ using Firma.Models.Entities;
 
 namespace Firma.Managers
 {
-    public class TaxRegimeManager
+    public class TaxRegimeManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -35,11 +35,11 @@ namespace Firma.Managers
             return company;
         }
 
-        private async void Update(LucroCsvDto record)
+        private async Task Update(LucroCsvDto record)
         {
         }
 
-        private async void Create(LucroCsvDto record)
+        private async Task Create(LucroCsvDto record)
         {
             _logger.LogInformation("Creating Tax Regime.");
             Company company = await GetCompany(record);
@@ -56,7 +56,7 @@ namespace Firma.Managers
 
         
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             _logger.LogInformation("Importing TaxRegime Data");
             var destinationDirectory = await _receitaFederal.TaxRegimeDownload();
@@ -64,9 +64,9 @@ namespace Firma.Managers
             {
                 Company company = await GetCompany(record);
                 if(company.TaxRegime.Lucro is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
         }
     }

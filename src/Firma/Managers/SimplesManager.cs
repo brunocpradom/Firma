@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class SimplesManager
+    public class SimplesManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,7 +26,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(SimplesCsvDto record)
+        private async Task Update(SimplesCsvDto record)
         {
         }
         private Simples CreateSimples(SimplesCsvDto record)
@@ -50,7 +50,7 @@ namespace Firma.Managers
             return mei;
         }
 
-        private async void Create(SimplesCsvDto record)
+        private async Task Create(SimplesCsvDto record)
         {
             var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
             
@@ -73,7 +73,7 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Simples);
             foreach(var record in _csvParser.ProcessCsv<SimplesCsvDto>(destinationDirectory))
@@ -81,9 +81,9 @@ namespace Firma.Managers
                 var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
                 
                 if(company.TaxRegime.Simples is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

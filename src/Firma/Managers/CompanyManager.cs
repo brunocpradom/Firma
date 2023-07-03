@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CompanyManager
+    public class CompanyManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -29,11 +29,11 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(CompanyCsvDto record)
+        private async Task Update(CompanyCsvDto record)
         {
             
         }
-        private async void Create(CompanyCsvDto record)
+        private async Task Create(CompanyCsvDto record)
         {
             _logger.LogInformation("Creating Company.");
             var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.LegalNature);
@@ -51,7 +51,7 @@ namespace Firma.Managers
             _context.Add(company);
             await _context.SaveChangesAsync();
         }
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Empresa);
             foreach(var record in _csvParser.ProcessCsv<CompanyCsvDto>(destinationDirectory))
@@ -59,11 +59,11 @@ namespace Firma.Managers
                 var company = await _context.Company.FirstOrDefaultAsync(c=> c.BasicTaxId == record.BasicTaxId);
                 if(company is null)
                 {
-                    Create(record);
+                    await Create(record);
                 }
                 else
                 {
-                    Update(record);
+                    await Update(record);
                 }
             }
             _receitaFederal.DeleteFiles(destinationDirectory);

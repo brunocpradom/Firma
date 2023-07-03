@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CityManager
+    public class CityManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,11 +26,11 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(CityCsvDto record)
+        private async Task Update(CityCsvDto record)
         {
         }
 
-        private async void Create(CityCsvDto record)
+        private async Task Create(CityCsvDto record)
         {
             _logger.LogInformation("Creating City");
             City city = new(){
@@ -41,16 +41,16 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Municipio);
             foreach(var record in _csvParser.ProcessCsv<CityCsvDto>(destinationDirectory))
             {
                 var city = await _context.City.FirstOrDefaultAsync(c=> c.Code == record.Code);
                 if(city is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

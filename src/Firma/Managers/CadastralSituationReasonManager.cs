@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CadastralSituationReasonManager
+    public class CadastralSituationReasonManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,31 +26,31 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(CadastralSituationReasonDto record)
+        private async Task Update(CadastralSituationReasonDto record)
         {
         }
 
-        private async void Create(CadastralSituationReasonDto record)
+        private async Task Create(CadastralSituationReasonDto csvDto)
         {
             _logger.LogInformation("Creating Cadastral Situation Reason");
             CadastralSituationReason cadastralSituationReason = new(){
-                Code = record.Code,
-                Description = record.Description
+                Code = csvDto.Code,
+                Description = csvDto.Description
             };
             _context.Add(cadastralSituationReason);
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Motivo);
             foreach(var record in _csvParser.ProcessCsv<CadastralSituationReasonDto>(destinationDirectory))
             {
                 var country = await _context.CadastralSituationReason.FirstOrDefaultAsync(c=> c.Code == record.Code);
                 if(country is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

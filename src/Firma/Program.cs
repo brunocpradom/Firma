@@ -1,4 +1,5 @@
 using Firma.Data;
+using Firma.Managers;
 using Firma.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services
-    .AddDbContext<DataContext>(options => 
+    .AddDbContext<DataContext>(options =>
     options
         .UseSnakeCaseNamingConvention()
         .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -23,8 +24,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IReceitaFederalClient, ReceitaFederalClient>();
 builder.Services.AddScoped<IReceitaFederalService, ReceitaFederalService>();
-builder.Services.AddScoped<ICsvParserService , CsvParserService>();
-
+builder.Services.AddScoped<ICsvParserService, CsvParserService>();
+builder.Services.AddScoped<IManager, CadastralSituationReasonManager>();
+builder.Services.AddScoped<IManager, CityManager>();
+builder.Services.AddScoped<IManager, CnaeManager>();
+builder.Services.AddScoped<IManager, CompanyManager>();
+builder.Services.AddScoped<IManager, CountryManager>();
+builder.Services.AddScoped<IManager, EstablishmentsManager>();
+builder.Services.AddScoped<IManager, LegalNatureManager>();
+builder.Services.AddScoped<IManager, PartnersManager>();
+builder.Services.AddScoped<IManager, QualificationManager>();
+builder.Services.AddScoped<IManager, SimplesManager>();
+builder.Services.AddScoped<IManager, TaxRegimeManager>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CountryManager
+    public class CountryManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,11 +26,11 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(CountryCsvDto record)
+        private async Task Update(CountryCsvDto record)
         {
         }
 
-        private async void Create(CountryCsvDto record)
+        private async Task Create(CountryCsvDto record)
         {
             _logger.LogInformation("Creating Country");
             Country country = new(){
@@ -41,16 +41,16 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Pais);
             foreach(var record in _csvParser.ProcessCsv<CountryCsvDto>(destinationDirectory))
             {
                 var country = await _context.Country.FirstOrDefaultAsync(c=> c.Code == record.Code);
                 if(country is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

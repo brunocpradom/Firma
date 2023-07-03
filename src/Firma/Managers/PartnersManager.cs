@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class PartnersManager
+    public class PartnersManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -27,7 +27,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Create(PartnerCsvDto record)
+        private async Task Create(PartnerCsvDto record)
         {
             _logger.LogInformation("Creating Partner.");
             var company = await _context.Company.FirstAsync(c=> c.BasicTaxId == record.BasicTaxId);
@@ -50,12 +50,12 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        private async void Update(PartnerCsvDto record)
+        private async Task Update(PartnerCsvDto record)
         {
             var company = await _context.Company.FirstOrDefaultAsync(c=> c.BasicTaxId == record.BasicTaxId);
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Socio);
             foreach(var record in _csvParser.ProcessCsv<PartnerCsvDto>(destinationDirectory))
@@ -63,11 +63,11 @@ namespace Firma.Managers
                 var partner = await _context.Partner.FirstOrDefaultAsync(p => p.Name == record.Name);
                 if(partner is null)
                 {
-                    Create(record);
+                    await Create(record);
                 }
                 else
                 {
-                    Update(record);
+                    await Update(record);
                 }
             }
             _receitaFederal.DeleteFiles(destinationDirectory);

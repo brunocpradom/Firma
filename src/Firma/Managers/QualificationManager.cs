@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class QualificationManager
+    public class QualificationManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,11 +26,11 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(QualificationCsvDto record)
+        private async Task Update(QualificationCsvDto record)
         {
         }
 
-        private async void Create(QualificationCsvDto record)
+        private async Task Create(QualificationCsvDto record)
         {
             _logger.LogInformation("Creating Qualification.");
             Qualification qualification = new(){
@@ -41,16 +41,16 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Qualifica);
             foreach(var record in _csvParser.ProcessCsv<QualificationCsvDto>(destinationDirectory))
             {
                 var qualification = await _context.Qualification.FirstOrDefaultAsync(c=> c.Code == record.Code);
                 if(qualification is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

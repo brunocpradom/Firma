@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class LegalNatureManager
+    public class LegalNatureManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _csvParser;
@@ -26,11 +26,11 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async void Update(LegalNatureCsvDto record)
+        private async Task Update(LegalNatureCsvDto record)
         {
         }
 
-        private async void Create(LegalNatureCsvDto record)
+        private async Task Create(LegalNatureCsvDto record)
         {
             _logger.LogInformation("Creating Legal Nature.");
             LegalNature legalNature = new(){
@@ -41,16 +41,16 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async void ImportData()
+        public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Natureza);
             foreach(var record in _csvParser.ProcessCsv<LegalNatureCsvDto>(destinationDirectory))
             {
                 var country = await _context.LegalNature.FirstOrDefaultAsync(l=> l.Code == record.Code);
                 if(country is null)
-                    Create(record);
+                    await Create(record);
                 else
-                    Update(record);
+                    await Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }
