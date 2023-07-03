@@ -9,25 +9,31 @@ namespace Firma.Services
 {
     public class ReceitaFederalClient : IReceitaFederalClient
     {
-        private string _baseUrl =  "http://200.152.38.155/CNPJ/";
+        private string _baseUrl = "http://200.152.38.155/CNPJ/";
         private ILogger<ReceitaFederalClient> _logger;
+        private HttpClient _client;
 
-        public ReceitaFederalClient(ILogger<ReceitaFederalClient> logger)
+        public ReceitaFederalClient(ILogger<ReceitaFederalClient> logger, HttpClient client)
         {
             _logger = logger;
+            _client = client;
         }
 
-        public async Task<IEnumerable<string>> GetLinks(string url)
+        private async Task<IEnumerable<string>> GetLinks(string url)
         {
-            var web = new HtmlWeb();
-            var doc = await web.LoadFromWebAsync(url);
-            var links = doc.DocumentNode.Descendants("a")
+            HttpResponseMessage response = await _client.GetAsync(url);
+            string htmlContent = await response.Content.ReadAsStringAsync();
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(htmlContent);
+
+            var links = htmlDoc.DocumentNode.Descendants("a")
                 .Select(a => a.GetAttributeValue("href", null))
                 .Where(href => !string.IsNullOrEmpty(href))
-                .Where(l => l.EndsWith(".zip") )
+                .Where(l => l.EndsWith(".zip"))
                 .Select(t => $"{_baseUrl}{t}");
             return links;
         }
+
 
         public async Task<IEnumerable<string>> GetMainLinks()
         {
@@ -45,17 +51,16 @@ namespace Firma.Services
             _logger.LogInformation($"DestinationDirectory : {destinationDirectory}");
 
             var fileName = link.Split("/").Last();
-            var destinationPath = Path.Combine(destinationDirectory,fileName);
-            
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetStreamAsync(link);
+            var destinationPath = Path.Combine(destinationDirectory, fileName);
+
+            var response = await _client.GetStreamAsync(link);
             var fileStream = new FileStream(@destinationPath, FileMode.OpenOrCreate);
             await response.CopyToAsync(fileStream);
-            
+
             _logger.LogInformation("Download finished");
             fileStream.Dispose();
             return destinationPath;
-            
+
         }
     }
 }

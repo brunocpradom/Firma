@@ -21,7 +21,7 @@ namespace Firma.Services
 
         private async Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory)
         {
-            foreach(string link in links)
+            foreach (string link in links)
             {
                 var destinationPath = await _rfClient.DownloadFile(link, destinationDirectory);
                 ZipFile.ExtractToDirectory(destinationPath, destinationDirectory, Encoding.GetEncoding(28591));
@@ -29,21 +29,21 @@ namespace Firma.Services
             }
             return destinationDirectory;
         }
-        public async Task<string> Download(DownloadTarget target) // este metodo receberia uma string com o que deveria ser baixado .ex:Cnae,Empresa
+        public async Task<string> Download(DownloadTarget target)
         {
-            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", target.ToString());
+            var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());
             Directory.CreateDirectory(destinationDirectory);
             var mainLinks = await _rfClient.GetMainLinks();
             var links = mainLinks.Where(l => l.Contains(target.ToString()));
             await DataDownload(links, destinationDirectory);
-            return  destinationDirectory;
+            return destinationDirectory;
         }
         public async Task<string> TaxRegimeDownload()
         {
-            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(),"temp", "legal");
+            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(), "temp", "legal");
             var taxRegimeLinks = await _rfClient.GetTaxRegimeLinks();
             await DataDownload(taxRegimeLinks, destinationDirectory);
-            return  destinationDirectory;
+            return destinationDirectory;
         }
         public void DeleteFiles(string pathDirectory)
         {
