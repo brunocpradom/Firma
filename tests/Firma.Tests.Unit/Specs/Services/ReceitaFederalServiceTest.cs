@@ -21,13 +21,12 @@ namespace Firma.Tests.Specs.Services
         public async Task DownloadTest()
         {
             MockFileProvider mockFileProvider = new();
-            Console.WriteLine(mockFileProvider.GetMockFilesPath());
             ReceitaFederalClientMock rfClientMock = new();
             ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile();
             ReceitaFederalService rfService = new(rfClient);
             var target = DownloadTarget.Cnae;
             var response = await rfService.Download(target);
-            Console.WriteLine(response);
+            Assert.AreEqual(response, Path.Combine(Path.GetTempPath(), target.ToString()));
         }
     }
 }
