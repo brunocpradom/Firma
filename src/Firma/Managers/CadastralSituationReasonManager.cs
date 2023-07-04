@@ -28,12 +28,14 @@ namespace Firma.Managers
 
         private async Task Update(CadastralSituationReasonDto record)
         {
+            throw new NotImplementedException();
         }
 
         private async Task Create(CadastralSituationReasonDto csvDto)
         {
             _logger.LogInformation("Creating Cadastral Situation Reason");
-            CadastralSituationReason cadastralSituationReason = new(){
+            CadastralSituationReason cadastralSituationReason = new()
+            {
                 Code = csvDto.Code,
                 Description = csvDto.Description
             };
@@ -44,10 +46,10 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Motivo);
-            foreach(var record in _csvParser.ProcessCsv<CadastralSituationReasonDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<CadastralSituationReasonDto>(destinationDirectory))
             {
-                var country = await _context.CadastralSituationReason.FirstOrDefaultAsync(c=> c.Code == record.Code);
-                if(country is null)
+                var country = await _context.CadastralSituationReason.FirstOrDefaultAsync(c => c.Code == record.Code);
+                if (country is null)
                     await Create(record);
                 else
                     await Update(record);

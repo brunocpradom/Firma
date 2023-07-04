@@ -28,12 +28,14 @@ namespace Firma.Managers
 
         private async Task Update(LegalNatureCsvDto record)
         {
+            throw new NotImplementedException();
         }
 
         private async Task Create(LegalNatureCsvDto record)
         {
             _logger.LogInformation("Creating Legal Nature.");
-            LegalNature legalNature = new(){
+            LegalNature legalNature = new()
+            {
                 Code = record.Code,
                 Description = record.Description
             };
@@ -44,10 +46,10 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Natureza);
-            foreach(var record in _csvParser.ProcessCsv<LegalNatureCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<LegalNatureCsvDto>(destinationDirectory))
             {
-                var country = await _context.LegalNature.FirstOrDefaultAsync(l=> l.Code == record.Code);
-                if(country is null)
+                var country = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.Code);
+                if (country is null)
                     await Create(record);
                 else
                     await Update(record);

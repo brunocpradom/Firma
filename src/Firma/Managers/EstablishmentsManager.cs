@@ -31,35 +31,13 @@ namespace Firma.Managers
 
         private async Task Update(EstablishmentCsvDto record)
         {
-            //todo- criar logica de update
-            var taxId = $"{record.BasicTaxId}{record.OrderTaxId}{record.DVTaxId}";
-            var establishment = _context.Establishment.First(e => e.TaxId == taxId);
-            //Check if cnae has changed
-            if (establishment.MainCnae.Cnae.Code != record.MainCnae)
-            {
-                var newCnae = _context.Cnae.First(c => c.Code == record.MainCnae);
-                establishment.MainCnae.Cnae = newCnae;
-
-            }
-
-            if(record.SecondaryCnae is not null)
-            {
-                var splitSecondaryCnaes = record.SecondaryCnae.Split(",");
-                var secondaryCnaes = await _context.Cnae.Where(c => splitSecondaryCnaes.Contains(c.Code))
-                         .ToArrayAsync();
-                //todo - verificar se foi acrescentado ou retirado algum cnae
-                //splitSecondaryCnaes.Any(code => !secondaryCnaes.Equals(code));
-            }
-            
-            
-            
-            _context.Add(establishment);
-            await _context.SaveChangesAsync();
+            throw new NotImplementedException();
         }
         private async Task<CadastralSituation> CreateCadastralSituation(EstablishmentCsvDto record)
         {
-            CadastralSituationReason reason = await _context.CadastralSituationReason.FirstAsync(r => r.Code == record.CadastralSituationReason );
-            CadastralSituation cadastralSituation = new(){
+            CadastralSituationReason reason = await _context.CadastralSituationReason.FirstAsync(r => r.Code == record.CadastralSituationReason);
+            CadastralSituation cadastralSituation = new()
+            {
                 Situation = (CadastralSituationCode)Enum.ToObject(typeof(CadastralSituationCode), record.CadastralSituation),
                 CadastralSituationDate = record.CadastralSituationDate,
                 CadastralSituationReason = reason,
@@ -73,7 +51,8 @@ namespace Firma.Managers
         {
             var city = await _context.City.FirstAsync(c => c.Code == record.City);
             var country = await _context.Country.FirstAsync(c => c.Code == record.Country);
-            Address address = new(){
+            Address address = new()
+            {
                 ForeignCityName = record.ForeignCityName,
                 Country = country,
                 StreetType = record.StreetType,
@@ -91,20 +70,20 @@ namespace Firma.Managers
         private async Task<SecondaryCnaes?> CreateSecondaryCnaes(EstablishmentCsvDto record)
         {
             SecondaryCnaes? secondaryCnae = null;
-            if(record.SecondaryCnae is not null)
+            if (record.SecondaryCnae is not null)
             {
                 var splitSecondaryCnaes = record.SecondaryCnae.Split(",");
                 var secondaryCnaes = await _context.Cnae.Where(c => splitSecondaryCnaes.Contains(c.Code))
                          .ToListAsync();
-                secondaryCnae = new(){Cnaes = secondaryCnaes};
+                secondaryCnae = new() { Cnaes = secondaryCnaes };
             }
             return secondaryCnae;
         }
-        
+
         private async Task<MainCnae> CreateMainCnae(EstablishmentCsvDto record)
         {
-            var cnae = await _context.Cnae.FirstAsync(cn => cn.Code == record.MainCnae);            
-            MainCnae mainCnae = new(){Cnae = cnae};
+            var cnae = await _context.Cnae.FirstAsync(cn => cn.Code == record.MainCnae);
+            MainCnae mainCnae = new() { Cnae = cnae };
             return mainCnae;
         }
 
@@ -126,10 +105,11 @@ namespace Firma.Managers
             CadastralSituation cadastralSituation = await CreateCadastralSituation(record);
             Address address = await CreateAddress(record);
             List<Telephone> telephones = CreateTelephones(record);
-            List<Email> emails = new(){new Email {Address = record.Email}};
+            List<Email> emails = new() { new Email { Address = record.Email } };
 
             var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
-            var establishment = new Establishment(){
+            var establishment = new Establishment()
+            {
                 Company = company,
                 TaxId = $"{record.BasicTaxId}{record.OrderTaxId}{record.DVTaxId}",
                 Identifier = (Identifier)Enum.ToObject(typeof(Identifier), record.Identifier),
@@ -137,12 +117,12 @@ namespace Firma.Managers
                 ActivityStartDate = record.ActivityStartDate,
                 CadastralSituation = cadastralSituation,
                 MainCnae = mainCnae,
-                SecondaryCnaes = record.SecondaryCnae is not null ? secondaryCnae : null, 
+                SecondaryCnaes = record.SecondaryCnae is not null ? secondaryCnae : null,
                 Address = address,
                 Telephone = telephones,
                 Email = emails
             };
-            
+
             _context.Add(establishment);
             await _context.SaveChangesAsync();
         }
@@ -150,12 +130,12 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Estabelecimento);
-            foreach(var record in _csvParser.ProcessCsv<EstablishmentCsvDto>(destinationDirectory))
-            { 
+            foreach (var record in _csvParser.ProcessCsv<EstablishmentCsvDto>(destinationDirectory))
+            {
                 var taxId = $"{record.BasicTaxId}{record.OrderTaxId}{record.DVTaxId}";
-                var establishment = await _context.Establishment.FirstOrDefaultAsync(e=> e.TaxId == taxId);
-                
-                if(establishment is null)
+                var establishment = await _context.Establishment.FirstOrDefaultAsync(e => e.TaxId == taxId);
+
+                if (establishment is null)
                 {
                     await Create(record);
                 }

@@ -30,10 +30,11 @@ namespace Firma.Managers
         private async Task Create(PartnerCsvDto record)
         {
             _logger.LogInformation("Creating Partner.");
-            var company = await _context.Company.FirstAsync(c=> c.BasicTaxId == record.BasicTaxId);
+            var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
             var qualification = await _context.Qualification.FirstAsync(q => q.Code == record.Qualification);
             var country = await _context.Country.FirstAsync(c => c.Code == record.Country);
-            Partner partner = new(){
+            Partner partner = new()
+            {
                 Company = company,
                 Identifier = (PartnerIdentifier)Enum.ToObject(typeof(PartnerIdentifier), record.Identifier),
                 Name = record.Name,
@@ -52,16 +53,16 @@ namespace Firma.Managers
 
         private async Task Update(PartnerCsvDto record)
         {
-            var company = await _context.Company.FirstOrDefaultAsync(c=> c.BasicTaxId == record.BasicTaxId);
+            throw new NotImplementedException();
         }
 
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Socio);
-            foreach(var record in _csvParser.ProcessCsv<PartnerCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<PartnerCsvDto>(destinationDirectory))
             {
                 var partner = await _context.Partner.FirstOrDefaultAsync(p => p.Name == record.Name);
-                if(partner is null)
+                if (partner is null)
                 {
                     await Create(record);
                 }

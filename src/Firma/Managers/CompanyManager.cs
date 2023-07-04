@@ -31,22 +31,23 @@ namespace Firma.Managers
 
         private async Task Update(CompanyCsvDto record)
         {
-            
+            throw new NotImplementedException();
         }
         private async Task Create(CompanyCsvDto record)
         {
             _logger.LogInformation("Creating Company.");
             var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.LegalNature);
-            var company = new Company(){
+            var company = new Company()
+            {
                 BasicTaxId = record.BasicTaxId,
                 RegisteredName = record.RegisteredName,
                 LegalNature = legalNature!,
                 ShareCapital = record.ShareCapital,
                 CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), record.CompanySize!),
-                TaxRegime = new TaxRegime(){},
-                ResponsibleFederalEntity =record.ResponsibleFederalEntity,
+                TaxRegime = new TaxRegime() { },
+                ResponsibleFederalEntity = record.ResponsibleFederalEntity,
                 QualificationOfPersonInCharge = (QualificationOfPersonInCharge)Enum.ToObject(typeof(QualificationOfPersonInCharge), record.QualificationOfPersonInCharge!)
-                
+
             };
             _context.Add(company);
             await _context.SaveChangesAsync();
@@ -54,10 +55,10 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Empresa);
-            foreach(var record in _csvParser.ProcessCsv<CompanyCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<CompanyCsvDto>(destinationDirectory))
             {
-                var company = await _context.Company.FirstOrDefaultAsync(c=> c.BasicTaxId == record.BasicTaxId);
-                if(company is null)
+                var company = await _context.Company.FirstOrDefaultAsync(c => c.BasicTaxId == record.BasicTaxId);
+                if (company is null)
                 {
                     await Create(record);
                 }

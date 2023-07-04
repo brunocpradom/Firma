@@ -28,12 +28,14 @@ namespace Firma.Managers
 
         private async Task Update(QualificationCsvDto record)
         {
+            throw new NotImplementedException();
         }
 
         private async Task Create(QualificationCsvDto record)
         {
             _logger.LogInformation("Creating Qualification.");
-            Qualification qualification = new(){
+            Qualification qualification = new()
+            {
                 Code = record.Code,
                 Description = record.Description
             };
@@ -44,10 +46,10 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Qualifica);
-            foreach(var record in _csvParser.ProcessCsv<QualificationCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<QualificationCsvDto>(destinationDirectory))
             {
-                var qualification = await _context.Qualification.FirstOrDefaultAsync(c=> c.Code == record.Code);
-                if(qualification is null)
+                var qualification = await _context.Qualification.FirstOrDefaultAsync(c => c.Code == record.Code);
+                if (qualification is null)
                     await Create(record);
                 else
                     await Update(record);
