@@ -38,9 +38,9 @@ namespace Firma.Services
             await DataDownload(links, destinationDirectory);
             return destinationDirectory;
         }
-        public async Task<string> TaxRegimeDownload()
+        public async Task<string> TaxRegimeDownload(DownloadTarget target)
         {
-            var destinationDirectory = Path.Combine(Directory.GetCurrentDirectory(), "temp", "legal");
+            var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());
             var taxRegimeLinks = await _rfClient.GetTaxRegimeLinks();
             await DataDownload(taxRegimeLinks, destinationDirectory);
             return destinationDirectory;
