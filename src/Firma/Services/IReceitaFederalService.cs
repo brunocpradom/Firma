@@ -10,7 +10,7 @@ namespace Firma.Services
     {
         //Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory);
         Task<string> Download(DownloadTarget target);
-        Task<string> TaxRegimeDownload();
+        Task<string> TaxRegimeDownload(DownloadTarget target);
         public void DeleteFiles(string pathDirectory);
     }
 }

@@ -14,9 +14,9 @@ namespace Firma.Services
 {
     public class CsvParserService : ICsvParserService
     {
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<CsvParserService> _logger;
 
-        public CsvParserService(ILogger<ReceitaFederalClient> logger)
+        public CsvParserService(ILogger<CsvParserService> logger)
         {
             _logger = logger;
         }
@@ -26,7 +26,7 @@ namespace Firma.Services
             _logger.LogInformation("Start csv parsing!");
 
             var files = Directory.GetFiles(pathDirectory);
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 _logger.LogInformation(file);
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -38,11 +38,11 @@ namespace Firma.Services
                 var csv = new CsvReader(reader, config);
                 var records = csv.GetRecords<CsvDto>();
 
-                foreach(var record in records)
+                foreach (var record in records)
                 {
                     yield return record;
                 }
-            }          
+            }
         }
     }
 }
