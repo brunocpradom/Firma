@@ -28,12 +28,14 @@ namespace Firma.Managers
 
         private async Task Update(CityCsvDto record)
         {
+            throw new NotImplementedException();
         }
 
         private async Task Create(CityCsvDto record)
         {
             _logger.LogInformation("Creating City");
-            City city = new(){
+            City city = new()
+            {
                 Code = record.Code,
                 Name = record.Description
             };
@@ -44,10 +46,10 @@ namespace Firma.Managers
         public async Task ImportData()
         {
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Municipio);
-            foreach(var record in _csvParser.ProcessCsv<CityCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsv<CityCsvDto>(destinationDirectory))
             {
-                var city = await _context.City.FirstOrDefaultAsync(c=> c.Code == record.Code);
-                if(city is null)
+                var city = await _context.City.FirstOrDefaultAsync(c => c.Code == record.Code);
+                if (city is null)
                     await Create(record);
                 else
                     await Update(record);
