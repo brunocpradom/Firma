@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 
-namespace Firma.Tests.TestUtils
+namespace Firma.Tests.Common.TestUtils
 {
     public class ReceitaFederalClientMock
     {
@@ -139,9 +139,6 @@ namespace Firma.Tests.TestUtils
             var mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "cnaes.zip");
 
             MemoryStream memoryStream = new MemoryStream();
-
-            Console.WriteLine("mockZipFilePath");
-            Console.WriteLine(mockZipFilePath);
 
             using (FileStream fileStream = new FileStream(mockZipFilePath, FileMode.Open, FileAccess.Read))
             {

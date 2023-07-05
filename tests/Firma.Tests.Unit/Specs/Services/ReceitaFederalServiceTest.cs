@@ -5,17 +5,13 @@ using System.Threading.Tasks;
 using Firma.Models;
 using Firma.Services;
 using Firma.Tests.Common;
-using Firma.Tests.TestUtils;
+using Firma.Tests.Common.TestUtils;
 using NUnit.Framework;
 
 namespace Firma.Tests.Specs.Services
 {
     public class ReceitaFederalServiceTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
 
         [Test]
         public async Task DownloadTest()

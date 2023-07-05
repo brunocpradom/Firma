@@ -12,9 +12,9 @@ using Moq.Protected;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Text;
-using Firma.Tests.TestUtils;
 using Firma.Models;
 using System.Reflection;
+using Firma.Tests.Common.TestUtils;
 
 namespace Firma.Tests.Specs.Services
 {
