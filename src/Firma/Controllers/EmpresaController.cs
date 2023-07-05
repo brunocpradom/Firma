@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Firma.Managers;
+using Firma.Models;
 using Firma.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace Firma.Controllers
         [HttpGet("teste")]
         public async Task<string> Get()
         {
-            await _rfService.TaxRegimeDownload();
+            await _rfService.TaxRegimeDownload(DownloadTarget.Natureza);
             _logger.LogInformation("teste 123");
             return "ok";
         }
