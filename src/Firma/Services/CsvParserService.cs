@@ -34,14 +34,17 @@ namespace Firma.Services
                     HasHeaderRecord = false,
                     Delimiter = ";",
                 };
-                var reader = new StreamReader(file, Encoding.GetEncoding(28591));
-                var csv = new CsvReader(reader, config);
-                var records = csv.GetRecords<CsvDto>();
-
-                foreach (var record in records)
+                using (var reader = new StreamReader(file, Encoding.GetEncoding(28591)))
                 {
-                    yield return record;
+                    var csv = new CsvReader(reader, config);
+                    var records = csv.GetRecords<CsvDto>();
+
+                    foreach (var record in records)
+                    {
+                        yield return record;
+                    }
                 }
+
             }
         }
     }
