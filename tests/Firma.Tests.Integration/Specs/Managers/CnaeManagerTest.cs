@@ -2,22 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Firma.Data;
 using Firma.Managers;
 using Firma.Models.Values.Legal;
 using Firma.Services;
-using Firma.Tests.Common;
 using Firma.Tests.Common.TestUtils;
 using Firma.Tests.Integration.Fixtures;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using Testcontainers.PostgreSql;
 
-namespace Firma.Tests.Integration.Managers
+namespace Firma.Tests.Integration.Specs.Managers
 {
     public class CnaeManagerTest : DbFixture
     {
