@@ -15,15 +15,12 @@ using System.Text;
 using Firma.Models;
 using System.Reflection;
 using Firma.Tests.Common.TestUtils;
+using FluentAssertions;
 
 namespace Firma.Tests.Specs.Services
 {
     public class ReceitaFederalClientTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
 
         [Test]
         public async Task GetMainLinksTest()
@@ -31,7 +28,7 @@ namespace Firma.Tests.Specs.Services
             ReceitaFederalClientMock rfClientMock = new();
             ReceitaFederalClient rfClient = rfClientMock.MockGetMainLinks();
             var response = await rfClient.GetMainLinks();
-            Assert.AreEqual(response.Count(), 37);
+            response.Count().Should().Be(37);
         }
 
         [Test]
@@ -40,7 +37,7 @@ namespace Firma.Tests.Specs.Services
             ReceitaFederalClientMock rfClientMock = new();
             ReceitaFederalClient rfClient = rfClientMock.MockGetTaxRegimeLinks();
             var response = await rfClient.GetTaxRegimeLinks();
-            Assert.AreEqual(response.Count(), 4);
+            response.Count().Should().Be(4);
         }
 
         [Test]
@@ -54,7 +51,8 @@ namespace Firma.Tests.Specs.Services
             var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());
             Directory.CreateDirectory(destinationDirectory);
             var response = await rfClient.DownloadFile(link, destinationDirectory);
-            Assert.AreEqual(response, Path.Combine(destinationDirectory, link.Split("/").Last()));
+
+            response.Should().Be(Path.Combine(destinationDirectory, link.Split("/").Last()));
         }
     }
 }

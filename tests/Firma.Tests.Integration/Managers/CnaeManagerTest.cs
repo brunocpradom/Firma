@@ -9,6 +9,7 @@ using Firma.Services;
 using Firma.Tests.Common;
 using Firma.Tests.Common.TestUtils;
 using Firma.Tests.Integration.Fixtures;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,7 @@ namespace Firma.Tests.Integration.Managers
             await cnaeManager.ImportData();
             var cnae = await _dbContext.Cnae.FirstOrDefaultAsync(c => c.Code == "0111301");
 
-            Assert.AreEqual(cnae.Code, "0111301");
+            cnae.Code.Should().Be("0111301");
         }
     }
 }

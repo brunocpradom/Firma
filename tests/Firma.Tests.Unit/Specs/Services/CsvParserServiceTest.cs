@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Firma.Dtos.Csv;
 using Firma.Services;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace Firma.Tests.Specs.Services
             string mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "csv");
 
             var response = csvParserService.ProcessCsv<CnaeCsvDto>(mockZipFilePath);
-            Assert.AreEqual(response.First().Code, "0111301");
+            response.First().Code.Should().Be("0111301");
         }
     }
 }

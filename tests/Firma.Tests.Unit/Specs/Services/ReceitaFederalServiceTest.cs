@@ -6,6 +6,7 @@ using Firma.Models;
 using Firma.Services;
 using Firma.Tests.Common;
 using Firma.Tests.Common.TestUtils;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Firma.Tests.Specs.Services
@@ -22,7 +23,7 @@ namespace Firma.Tests.Specs.Services
             ReceitaFederalService rfService = new(rfClient);
             var target = DownloadTarget.Cnae;
             var response = await rfService.Download(target);
-            Assert.AreEqual(response, Path.Combine(Path.GetTempPath(), target.ToString()));
+            response.Should().Be(Path.Combine(Path.GetTempPath(), target.ToString()));
         }
     }
 }
