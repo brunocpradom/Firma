@@ -11,7 +11,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public class CnaeManager : IManager
+    public interface ICnaeManager
+    {
+        Task ImportData();
+    }
+
+    public class CnaeManager : ICnaeManager
     {
         private DataContext _context;
         private ICsvParserService _cnaeCsvParser;
@@ -30,13 +35,13 @@ namespace Firma.Managers
         {
             _logger.LogInformation("Creating Cnae");
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Cnae);
-            foreach(var record in _cnaeCsvParser.ProcessCsv<CnaeCsvDto>(destinationDirectory))
+            foreach (var record in _cnaeCsvParser.ProcessCsv<CnaeCsvDto>(destinationDirectory))
             {
-                var cnae = await _context.Cnae.FirstOrDefaultAsync(c=> c.Code == record.Code);
-                if(cnae is null)
+                var cnae = await _context.Cnae.FirstOrDefaultAsync(c => c.Code == record.Code);
+                if (cnae is null)
                 {
                     _context.Cnae.Add(
-                        new Cnae(){Code = record.Code, Description = record.Description}
+                        new Cnae() { Code = record.Code, Description = record.Description }
                         );
                     await _context.SaveChangesAsync();
                 }

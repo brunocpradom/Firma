@@ -27,7 +27,7 @@ builder.Services.AddScoped<IReceitaFederalService, ReceitaFederalService>();
 builder.Services.AddScoped<ICsvParserService, CsvParserService>();
 builder.Services.AddScoped<IManager, CadastralSituationReasonManager>();
 builder.Services.AddScoped<IManager, CityManager>();
-builder.Services.AddScoped<IManager, CnaeManager>();
+builder.Services.AddScoped<ICnaeManager, CnaeManager>();
 builder.Services.AddScoped<IManager, CompanyManager>();
 builder.Services.AddScoped<IManager, CountryManager>();
 builder.Services.AddScoped<IManager, EstablishmentsManager>();

@@ -16,26 +16,28 @@ namespace Firma.Controllers
         private IReceitaFederalService _rfService;
         private ICsvParserService _csvParser;
         private readonly ILogger<EmpresaController> _logger;
+        private readonly ICnaeManager _cnaeManager;
 
-        public EmpresaController(IReceitaFederalService rfService, ICsvParserService csvParser, ILogger<EmpresaController> logger)
+        public EmpresaController(IReceitaFederalService rfService, ICsvParserService csvParser, ILogger<EmpresaController> logger, ICnaeManager cnaeManager)
         {
             _rfService = rfService;
             _csvParser = csvParser;
             _logger = logger;
+            _cnaeManager = cnaeManager;
         }
 
         [HttpGet("teste")]
         public async Task<string> Get()
         {
-            await _rfService.TaxRegimeDownload(DownloadTarget.Natureza);
+            await _rfService.Download(DownloadTarget.Cnae);
             _logger.LogInformation("teste 123");
             return "ok";
         }
 
         [HttpGet("csv")]
-        public string Csv()
+        public async Task<string> Csv()
         {
-
+            await _cnaeManager.ImportData();
             return "ok";
         }
     }
