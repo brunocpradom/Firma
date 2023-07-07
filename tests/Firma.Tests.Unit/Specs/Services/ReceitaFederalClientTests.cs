@@ -44,7 +44,7 @@ namespace Firma.Tests.Specs.Services
         public async Task DownloadFileTest()
         {
             ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile();
+            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile("cnaes.zip");
             var link = "http://200.152.38.155/CNPJ/cnaes.zip";
             var target = DownloadTarget.Cnae;
 

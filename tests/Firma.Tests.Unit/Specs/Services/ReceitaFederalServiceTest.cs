@@ -19,7 +19,7 @@ namespace Firma.Tests.Specs.Services
         {
             MockFileProvider mockFileProvider = new();
             ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile();
+            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile("cnaes.zip");
             ReceitaFederalService rfService = new(rfClient);
             var target = DownloadTarget.Cnae;
             var response = await rfService.Download(target);
