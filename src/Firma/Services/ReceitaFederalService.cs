@@ -19,16 +19,20 @@ namespace Firma.Services
             _rfClient = rfClient;
         }
 
-        private async Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory)
+        private async Task<string> DataDownload(IEnumerable<string> links,
+            string destinationDirectory)
         {
-            foreach (string link in links)
+            foreach (var link in links)
             {
                 var destinationPath = await _rfClient.DownloadFile(link, destinationDirectory);
-                ZipFile.ExtractToDirectory(destinationPath, destinationDirectory, Encoding.GetEncoding(28591));
+                ZipFile.ExtractToDirectory(destinationPath, destinationDirectory,
+                    Encoding.GetEncoding(28591));
                 File.Delete(destinationPath);
             }
+
             return destinationDirectory;
         }
+
         public async Task<string> Download(DownloadTarget target)
         {
             var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());
@@ -38,6 +42,7 @@ namespace Firma.Services
             await DataDownload(links, destinationDirectory);
             return destinationDirectory;
         }
+
         public async Task<string> TaxRegimeDownload(DownloadTarget target)
         {
             var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());
@@ -45,6 +50,7 @@ namespace Firma.Services
             await DataDownload(taxRegimeLinks, destinationDirectory);
             return destinationDirectory;
         }
+
         public void DeleteFiles(string pathDirectory)
         {
             string[] files = Directory.GetFiles(pathDirectory);
@@ -55,4 +61,3 @@ namespace Firma.Services
         }
     }
 }
-

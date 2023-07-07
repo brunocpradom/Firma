@@ -21,12 +21,10 @@ namespace Firma.Tests.Specs.Services
 {
     public class ReceitaFederalClientTests
     {
-
         [Test]
         public async Task GetMainLinksTest()
         {
-            ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockGetMainLinks();
+            var rfClient = ReceitaFederalClientMock.MockGetMainLinks();
             var response = await rfClient.GetMainLinks();
             response.Count().Should().Be(37);
         }
@@ -34,8 +32,7 @@ namespace Firma.Tests.Specs.Services
         [Test]
         public async Task GetTaxRegimeLinks()
         {
-            ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockGetTaxRegimeLinks();
+            var rfClient = ReceitaFederalClientMock.MockGetTaxRegimeLinks();
             var response = await rfClient.GetTaxRegimeLinks();
             response.Count().Should().Be(4);
         }
@@ -43,9 +40,8 @@ namespace Firma.Tests.Specs.Services
         [Test]
         public async Task DownloadFileTest()
         {
-            ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile();
-            var link = "http://200.152.38.155/CNPJ/cnaes.zip";
+            var rfClient = ReceitaFederalClientMock.MockDownloadFile();
+            var link = "http://200.152.38.155/CNPJ/Cnaes.zip";
             var target = DownloadTarget.Cnae;
 
             var destinationDirectory = Path.Combine(Path.GetTempPath(), target.ToString());

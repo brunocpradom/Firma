@@ -8,13 +8,39 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 
-namespace Firma.Tests.Common.TestUtils
+namespace Firma.Tests.Common.TestUtils;
+
+public class MockedMessageHandler : HttpMessageHandler
 {
-    public class ReceitaFederalClientMock
+    readonly IDictionary<string, HttpContent> responses;
+
+    public MockedMessageHandler(IDictionary<string, HttpContent> responses) =>
+        this.responses = responses;
+
+    protected override Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
-        private HttpContent MockTaxRegimeLinksHttpContent()
+        if (request.RequestUri is not null &&
+            responses.TryGetValue(request.RequestUri.ToString(), out var content))
         {
-            var html = """            
+            HttpResponseMessage httpResponseMessage = new()
+            {
+                Content = content,
+            };
+
+            return Task.FromResult(httpResponseMessage);
+        }
+
+        throw new InvalidOperationException("URL not mapped");
+    }
+}
+
+public static class ReceitaFederalClientMock
+{
+    private static HttpContent MockTaxRegimeLinksHttpContent()
+    {
+        var html = """            
                 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
                 <html>
                 <head>
@@ -35,12 +61,13 @@ namespace Firma.Tests.Common.TestUtils
                 </table>
                 </body></html>
                 """;
-            HttpContent content = new StringContent(html, Encoding.UTF8, "application/json");
-            return content;
-        }
-        private HttpContent MockMainLinksHttpContent()
-        {
-            var html = """
+        HttpContent content = new StringContent(html, Encoding.UTF8, "application/json");
+        return content;
+    }
+
+    private static HttpContent MockMainLinksHttpContent()
+    {
+        var html = """
                     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
                     <html>
                     <head>
@@ -95,58 +122,57 @@ namespace Firma.Tests.Common.TestUtils
                     </table>
                     </body></html>
                     """;
-            HttpContent content = new StringContent(html, Encoding.UTF8, "application/json");
-            return content;
-        }
+        HttpContent content = new StringContent(html, Encoding.UTF8, "application/json");
+        return content;
+    }
 
-        public ReceitaFederalClient MockClient(HttpContent content)
-        {
-            var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+    public static ReceitaFederalClient MockClient(IDictionary<string, HttpContent> data) =>
+        CreateClient(new MockedMessageHandler(data));
 
-            HttpResponseMessage httpResponseMessage = new()
+    public static ReceitaFederalClient MockClient(string url, HttpContent content) =>
+        CreateClient(new MockedMessageHandler(
+            new Dictionary<string, HttpContent>
             {
-                Content = content
-            };
-            httpMessageHandlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(httpResponseMessage);
-            var httpClient = new HttpClient(httpMessageHandlerMock.Object);
-
-            var logger = Mock.Of<ILogger<ReceitaFederalClient>>();
-            ReceitaFederalClient _rfClient = new(logger, httpClient);
-
-            return _rfClient;
-        }
-
-        public ReceitaFederalClient MockGetMainLinks()
-        {
-            HttpContent content = MockMainLinksHttpContent();
-            return MockClient(content);
-        }
-        public ReceitaFederalClient MockGetTaxRegimeLinks()
-        {
-            HttpContent content = MockTaxRegimeLinksHttpContent();
-            return MockClient(content);
-        }
-
-        public ReceitaFederalClient MockDownloadFile()
-        {
-            var currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory());
-            var oneAboveDirectory = Directory.GetParent(currentDirectory!.ToString());
-            var twoAboveDirectory = Directory.GetParent(oneAboveDirectory!.ToString());
-            var mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "cnaes.zip");
-
-            MemoryStream memoryStream = new MemoryStream();
-
-            using (FileStream fileStream = new FileStream(mockZipFilePath, FileMode.Open, FileAccess.Read))
-            {
-                fileStream.CopyTo(memoryStream);
+                [url] = content,
             }
+        ));
 
-            var stream = new MemoryStream();
-            return MockClient(new StreamContent(stream));
-        }
+    static ReceitaFederalClient CreateClient(HttpMessageHandler httpMessageHandlerMock)
+    {
+        var httpClient = new HttpClient(httpMessageHandlerMock);
+        var logger = Mock.Of<ILogger<ReceitaFederalClient>>();
+        return new(logger, httpClient);
+    }
+
+    const string baseUrl = "http://200.152.38.155";
+
+    public static ReceitaFederalClient MockGetMainLinks()
+    {
+        var content = MockMainLinksHttpContent();
+        return MockClient($"{baseUrl}/CNPJ/", content);
+    }
+
+    public static ReceitaFederalClient MockGetTaxRegimeLinks()
+    {
+        var content = MockTaxRegimeLinksHttpContent();
+        return MockClient($"{baseUrl}/CNPJ/regime_tributario/", content);
+    }
+
+    public static ReceitaFederalClient MockDownloadFile()
+    {
+        var mockZipFilePath = Path.GetFullPath(
+            "../../../TestUtils/MockFiles/cnaes.zip",
+            Directory.GetCurrentDirectory()
+        );
+
+        var fileContent = File.ReadAllBytes(mockZipFilePath);
+        var memoryStream = new MemoryStream(fileContent);
+
+        return MockClient(new Dictionary<string, HttpContent>
+            {
+                [$"{baseUrl}/CNPJ/"] = MockMainLinksHttpContent(),
+                [$"{baseUrl}/CNPJ/Cnaes.zip"] = new StreamContent(memoryStream),
+            }
+        );
     }
 }

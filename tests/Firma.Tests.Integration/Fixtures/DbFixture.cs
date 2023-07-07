@@ -10,35 +10,37 @@ namespace Firma.Tests.Integration.Fixtures
 {
     public class DbFixture
     {
-        private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
-                .WithImage("postgres:latest")
-                .Build();
+        protected DataContext _dbContext = null!;
 
-        private DataContext CreateDbContext()
+        private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
+            .WithImage("postgres:latest")
+            .Build();
+
+        DataContext CreateDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
             optionsBuilder
                 .UseSnakeCaseNamingConvention()
-                .UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=postgres;Database=integration_test_db",
-                                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                .UseNpgsql(
+                    "Server=localhost;Port=5432;User Id=postgres;Password=postgres;Database=integration_test_db",
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
             DataContext dataContext = new(optionsBuilder.Options);
-            dataContext.Database.Migrate();
             return dataContext;
         }
 
-        public DataContext _dbContext => CreateDbContext();
-
         [SetUp]
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return _postgres.StartAsync();
-        }
-        [TearDown]
-        public Task DisposeAsync()
-        {
-            return _postgres.DisposeAsync().AsTask();
+            await _postgres.StartAsync();
+            _dbContext = CreateDbContext();
+            await _dbContext.Database.MigrateAsync();
         }
 
+        [TearDown]
+        public async Task DisposeAsync()
+        {
+            await _postgres.DisposeAsync();
+        }
     }
 }

@@ -13,13 +13,10 @@ namespace Firma.Tests.Specs.Services
 {
     public class ReceitaFederalServiceTest
     {
-
         [Test]
         public async Task DownloadTest()
         {
-            MockFileProvider mockFileProvider = new();
-            ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile();
+            ReceitaFederalClient rfClient = ReceitaFederalClientMock.MockDownloadFile();
             ReceitaFederalService rfService = new(rfClient);
             var target = DownloadTarget.Cnae;
             var response = await rfService.Download(target);
