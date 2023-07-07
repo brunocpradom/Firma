@@ -8,7 +8,7 @@ using Testcontainers.PostgreSql;
 
 namespace Firma.Tests.Integration.Fixtures
 {
-    public class DbFixture
+    public class DbFixture : ApiFixture
     {
         private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
                 .WithImage("postgres:latest")
@@ -22,9 +22,10 @@ namespace Firma.Tests.Integration.Fixtures
                 .UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=postgres;Database=integration_test_db",
                                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
-            DataContext dataContext = new(optionsBuilder.Options);
-            dataContext.Database.Migrate();
-            return dataContext;
+            DataContext dbContext = new(optionsBuilder.Options);
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.Migrate();
+            return dbContext;
         }
 
         public DataContext _dbContext => CreateDbContext();

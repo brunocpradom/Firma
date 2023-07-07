@@ -20,7 +20,7 @@
     <PackageReference Include="Respawn" Version="6.0.0" />
     <PackageReference Include="Testcontainers" Version="3.3.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="3.3.0" />
-    <PackageReference Include="WireMock.Net" Version="1.5.28" />
+    <PackageReference Include="WireMock.Net" Version="1.5.30" />
   </ItemGroup>
 
   <ItemGroup>
