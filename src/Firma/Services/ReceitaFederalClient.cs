@@ -9,14 +9,17 @@ namespace Firma.Services
 {
     public class ReceitaFederalClient : IReceitaFederalClient
     {
-        private string _baseUrl = "http://200.152.38.155/CNPJ/";
+        private string _baseUrl;
         private ILogger<ReceitaFederalClient> _logger;
         private HttpClient _client;
+        private IConfiguration _configuration;
 
-        public ReceitaFederalClient(ILogger<ReceitaFederalClient> logger, HttpClient client)
+        public ReceitaFederalClient(ILogger<ReceitaFederalClient> logger, HttpClient client, IConfiguration configuration)
         {
             _logger = logger;
             _client = client;
+            _configuration = configuration;
+            _baseUrl = _configuration.GetSection("ReceitaFederalUrl").Value!;
         }
 
         private async Task<IEnumerable<string>> GetLinks(string url)
@@ -30,22 +33,22 @@ namespace Firma.Services
                 .Select(a => a.GetAttributeValue("href", null))
                 .Where(href => !string.IsNullOrEmpty(href))
                 .Where(l => l.EndsWith(".zip"))
-                .Select(t => $"{_baseUrl}{t}");
+                .Select(t => $"{_baseUrl}/CNPJ/{t}");
             return links;
         }
 
 
-        public async Task<IEnumerable<string>> GetMainLinks()
+        public virtual async Task<IEnumerable<string>> GetMainLinks()
         {
-            return await GetLinks(_baseUrl);
+            return await GetLinks($"{_baseUrl}/CNPJ/");
         }
 
         public async Task<IEnumerable<string>> GetTaxRegimeLinks()
         {
-            return await GetLinks($"{_baseUrl}regime_tributario/");
+            return await GetLinks($"{_baseUrl}/CNPJ/regime_tributario/");
         }
 
-        public async Task<string> DownloadFile(string link, string destinationDirectory)
+        public virtual async Task<string> DownloadFile(string link, string destinationDirectory)
         {
             _logger.LogInformation("Download start!");
             _logger.LogInformation($"DestinationDirectory : {destinationDirectory}");
