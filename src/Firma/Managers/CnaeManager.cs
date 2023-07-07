@@ -11,17 +11,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Firma.Managers
 {
-    public interface ICnaeManager
-    {
-        Task ImportData();
-    }
-
-    public class CnaeManager : ICnaeManager
+    public class CnaeManager : IManager
     {
         private DataContext _context;
         private ICsvParserService _cnaeCsvParser;
         private IReceitaFederalService _receitaFederal;
         private readonly ILogger<CnaeManager> _logger;
+
+        public ManagerName Name => ManagerName.Cnae;
 
         public CnaeManager(DataContext context, ICsvParserService cnaeCsvParser, IReceitaFederalService receitaFederal, ILogger<CnaeManager> logger)
         {

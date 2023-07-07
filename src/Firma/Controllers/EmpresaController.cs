@@ -16,14 +16,14 @@ namespace Firma.Controllers
         private IReceitaFederalService _rfService;
         private ICsvParserService _csvParser;
         private readonly ILogger<EmpresaController> _logger;
-        private readonly ICnaeManager _cnaeManager;
+        private readonly IEnumerable<IManager> _managers;
 
-        public EmpresaController(IReceitaFederalService rfService, ICsvParserService csvParser, ILogger<EmpresaController> logger, ICnaeManager cnaeManager)
+        public EmpresaController(IReceitaFederalService rfService, ICsvParserService csvParser, ILogger<EmpresaController> logger, IEnumerable<IManager> managers)
         {
             _rfService = rfService;
             _csvParser = csvParser;
             _logger = logger;
-            _cnaeManager = cnaeManager;
+            _managers = managers;
         }
 
         [HttpGet("teste")]
@@ -34,10 +34,19 @@ namespace Firma.Controllers
             return "ok";
         }
 
-        [HttpGet("csv")]
-        public async Task<string> Csv()
+        [HttpGet("cnae")]
+        public async Task<string> Cnae()
         {
-            await _cnaeManager.ImportData();
+            var cnaeManager = _managers.Single(m => m.Name == ManagerName.Cnae);
+            await cnaeManager.ImportData();
+            return "ok";
+        }
+
+        [HttpGet("city")]
+        public async Task<string> City()
+        {
+            var cityManager = _managers.Single(m => m.Name == ManagerName.City);
+            await cityManager.ImportData();
             return "ok";
         }
     }

@@ -21,6 +21,8 @@ namespace Firma.Managers
         private IReceitaFederalService _receitaFederal;
         private ILogger<ReceitaFederalClient> _logger;
 
+        public ManagerName Name => ManagerName.Establishment;
+
         public EstablishmentsManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
         {
             _context = context;
