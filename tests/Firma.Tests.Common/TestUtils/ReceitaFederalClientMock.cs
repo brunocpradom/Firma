@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Firma.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -38,7 +39,7 @@ namespace Firma.Tests.Common.TestUtils
             HttpContent content = new StringContent(html, Encoding.UTF8, "application/json");
             return content;
         }
-        private HttpContent MockMainLinksHttpContent()
+        public HttpContent MockMainLinksHttpContent()
         {
             var html = """
                     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -115,7 +116,14 @@ namespace Firma.Tests.Common.TestUtils
             var httpClient = new HttpClient(httpMessageHandlerMock.Object);
 
             var logger = Mock.Of<ILogger<ReceitaFederalClient>>();
-            ReceitaFederalClient _rfClient = new(logger, httpClient);
+            var currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory());
+            var oneAboveDirectory = Directory.GetParent(currentDirectory!.ToString());
+            var twoAboveDirectory = Directory.GetParent(oneAboveDirectory!.ToString());
+
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(twoAboveDirectory!.ToString(), "appsettings.Development.json"))
+                .Build();
+            ReceitaFederalClient _rfClient = new(logger, httpClient, configuration);
 
             return _rfClient;
         }
@@ -131,12 +139,12 @@ namespace Firma.Tests.Common.TestUtils
             return MockClient(content);
         }
 
-        public ReceitaFederalClient MockDownloadFile()
+        public ReceitaFederalClient MockDownloadFile(string fileName)
         {
             var currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory());
             var oneAboveDirectory = Directory.GetParent(currentDirectory!.ToString());
             var twoAboveDirectory = Directory.GetParent(oneAboveDirectory!.ToString());
-            var mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "cnaes.zip");
+            var mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "zip", fileName);
 
             MemoryStream memoryStream = new MemoryStream();
 
