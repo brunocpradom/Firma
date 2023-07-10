@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -10,7 +11,7 @@ using WireMock.Settings;
 
 namespace Firma.Tests.Integration.Fixtures
 {
-    public class ApiFixture
+    public class ApiFixture : ServicesFixture
     {
         private WireMockServer server;
 
@@ -30,25 +31,7 @@ namespace Firma.Tests.Integration.Fixtures
                     <tr><td valign="top"><img src="/icons/back.gif" alt="[PARENTDIR]"></td><td><a href="/">Parent Directory</a>       </td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Cnaes.zip">Cnaes.zip</a>              </td><td align="right">2023-06-12 22:05  </td><td align="right"> 22K</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas0.zip">Empresas0.zip</a>          </td><td align="right">2023-06-12 22:08  </td><td align="right">257M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas1.zip">Empresas1.zip</a>          </td><td align="right">2023-06-12 22:07  </td><td align="right"> 74M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas2.zip">Empresas2.zip</a>          </td><td align="right">2023-06-12 22:08  </td><td align="right"> 75M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas3.zip">Empresas3.zip</a>          </td><td align="right">2023-06-12 22:08  </td><td align="right"> 81M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas4.zip">Empresas4.zip</a>          </td><td align="right">2023-06-12 22:09  </td><td align="right"> 86M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas5.zip">Empresas5.zip</a>          </td><td align="right">2023-06-12 22:09  </td><td align="right"> 93M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas6.zip">Empresas6.zip</a>          </td><td align="right">2023-06-12 22:10  </td><td align="right"> 90M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas7.zip">Empresas7.zip</a>          </td><td align="right">2023-06-12 22:11  </td><td align="right"> 95M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas8.zip">Empresas8.zip</a>          </td><td align="right">2023-06-12 22:10  </td><td align="right"> 95M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Empresas9.zip">Empresas9.zip</a>          </td><td align="right">2023-06-12 22:11  </td><td align="right"> 91M</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos0.zip">Estabelecimentos0.zip</a>  </td><td align="right">2023-06-12 22:19  </td><td align="right">1.0G</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos1.zip">Estabelecimentos1.zip</a>  </td><td align="right">2023-06-12 22:14  </td><td align="right">328M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos2.zip">Estabelecimentos2.zip</a>  </td><td align="right">2023-06-12 22:17  </td><td align="right">330M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos3.zip">Estabelecimentos3.zip</a>  </td><td align="right">2023-06-12 22:21  </td><td align="right">328M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos4.zip">Estabelecimentos4.zip</a>  </td><td align="right">2023-06-12 22:23  </td><td align="right">331M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos5.zip">Estabelecimentos5.zip</a>  </td><td align="right">2023-06-12 22:24  </td><td align="right">341M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos6.zip">Estabelecimentos6.zip</a>  </td><td align="right">2023-06-12 22:28  </td><td align="right">348M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos7.zip">Estabelecimentos7.zip</a>  </td><td align="right">2023-06-12 22:29  </td><td align="right">330M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos8.zip">Estabelecimentos8.zip</a>  </td><td align="right">2023-06-12 22:33  </td><td align="right">330M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Estabelecimentos9.zip">Estabelecimentos9.zip</a>  </td><td align="right">2023-06-12 22:34  </td><td align="right">328M</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/layout.gif" alt="[   ]"></td><td><a href="LAYOUT_DADOS_ABERTOS_CNPJ.pdf">LAYOUT_DADOS_ABERTOS..&gt;</a></td><td align="right">2019-02-22 17:41  </td><td align="right">115K</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Motivos.zip">Motivos.zip</a>            </td><td align="right">2023-06-12 22:33  </td><td align="right">1.1K</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Municipios.zip">Municipios.zip</a>         </td><td align="right">2023-06-12 22:33  </td><td align="right"> 42K</td><td>&nbsp;</td></tr>
@@ -57,15 +40,6 @@ namespace Firma.Tests.Integration.Fixtures
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Qualificacoes.zip">Qualificacoes.zip</a>      </td><td align="right">2023-06-12 22:33  </td><td align="right">1.0K</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Simples.zip">Simples.zip</a>            </td><td align="right">2023-06-12 22:39  </td><td align="right">192M</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios0.zip">Socios0.zip</a>            </td><td align="right">2023-06-12 22:39  </td><td align="right">109M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios1.zip">Socios1.zip</a>            </td><td align="right">2023-06-12 22:40  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios2.zip">Socios2.zip</a>            </td><td align="right">2023-06-12 22:40  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios3.zip">Socios3.zip</a>            </td><td align="right">2023-06-12 22:40  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios4.zip">Socios4.zip</a>            </td><td align="right">2023-06-12 22:41  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios5.zip">Socios5.zip</a>            </td><td align="right">2023-06-12 22:41  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios6.zip">Socios6.zip</a>            </td><td align="right">2023-06-12 22:41  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios7.zip">Socios7.zip</a>            </td><td align="right">2023-06-12 22:42  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios8.zip">Socios8.zip</a>            </td><td align="right">2023-06-12 22:42  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
-                    <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Socios8.zip">Socios8.zip</a>            </td><td align="right">2023-06-12 22:42  </td><td align="right"> 47M</td><td>&nbsp;</td></tr>
                     <tr><td valign="top"><img src="/icons/folder.gif" alt="[DIR]"></td><td><a href="regime_tributario/">regime_tributario/</a>     </td><td align="right">2023-02-01 12:56  </td><td align="right">  - </td><td>&nbsp;</td></tr>
                     <tr><th colspan="5"><hr></th></tr>
                     </table>
@@ -83,18 +57,15 @@ namespace Firma.Tests.Integration.Fixtures
             );
         }
 
-        private byte[] MockDownloadFile()
+
+        private byte[] MockDownloadFile(string fileName)
         {
             {
-                var currentDirectory = Directory.GetParent(Directory.GetCurrentDirectory());
-                var oneAboveDirectory = Directory.GetParent(currentDirectory!.ToString());
-                var twoAboveDirectory = Directory.GetParent(oneAboveDirectory!.ToString());
-                var mockZipFilePath = Path.Combine(twoAboveDirectory!.ToString(), "TestUtils", "MockFiles", "zip", "cnaes.zip");
-
+                var mockZipFilePath = Path.Combine(projectPath, "TestUtils", "MockFiles", "zip", fileName);
                 return File.ReadAllBytes(mockZipFilePath);
             }
         }
-        public void CreateDownloadFileStub()
+        public void CreateGetMainLinkStub()
         {
             server
                 .Given(Request.Create().WithPath("/CNPJ/").UsingGet())
@@ -105,14 +76,18 @@ namespace Firma.Tests.Integration.Fixtures
                         .WithHeader("Content-Disposition", "attachment; filename=arquivo.txt")
                         .WithBody(htmlMock())
                     );
+        }
+        public void CreateDownloadFileStub(string fileName)
+        {
+            CreateGetMainLinkStub();
             server
-                .Given(Request.Create().WithPath("/CNPJ/Cnaes.zip").UsingGet())
+                .Given(Request.Create().WithPath($"/CNPJ/{fileName}").UsingGet())
                 .RespondWith(
                     Response.Create()
                         .WithStatusCode(200)
                         .WithHeader("Content-Type", "application/octet-stream")
                         .WithHeader("Content-Disposition", "attachment; filename=arquivo.txt")
-                        .WithBody(MockDownloadFile())
+                        .WithBody(MockDownloadFile(fileName))
                     );
         }
 
