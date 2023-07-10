@@ -10,9 +10,10 @@ namespace Firma.Tests.Integration.Fixtures
 {
     public class DbFixture : ApiFixture
     {
+        protected DataContext _dbContext = null!;
         private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
-                .WithImage("postgres:latest")
-                .Build();
+            .WithImage("postgres:latest")
+            .Build();
 
         private DataContext CreateDbContext()
         {
@@ -23,21 +24,20 @@ namespace Firma.Tests.Integration.Fixtures
                                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
             DataContext dbContext = new(optionsBuilder.Options);
-            dbContext.Database.EnsureDeleted();
-            dbContext.Database.Migrate();
             return dbContext;
         }
 
-        public DataContext _dbContext => CreateDbContext();
-
         [SetUp]
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return _postgres.StartAsync();
+            await _postgres.StartAsync();
+            _dbContext = CreateDbContext();
+            await _dbContext.Database.MigrateAsync();
         }
         [TearDown]
         public Task DisposeAsync()
         {
+            _dbContext.Database.EnsureDeleted();
             return _postgres.DisposeAsync().AsTask();
         }
 
