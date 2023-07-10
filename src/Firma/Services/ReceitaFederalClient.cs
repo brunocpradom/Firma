@@ -57,11 +57,12 @@ namespace Firma.Services
             var destinationPath = Path.Combine(destinationDirectory, fileName);
 
             var response = await _client.GetStreamAsync(link);
-            var fileStream = new FileStream(@destinationPath, FileMode.OpenOrCreate);
+            await using var fileStream = new FileStream(destinationPath, FileMode.OpenOrCreate);
             await response.CopyToAsync(fileStream);
+            await fileStream.FlushAsync();
 
             _logger.LogInformation("Download finished");
-            fileStream.Dispose();
+
             return destinationPath;
 
         }

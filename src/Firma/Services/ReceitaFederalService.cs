@@ -19,9 +19,10 @@ namespace Firma.Services
             _rfClient = rfClient;
         }
 
-        private async Task<string> DataDownload(IEnumerable<string> links, string destinationDirectory)
+        private async Task<string> DataDownload(IEnumerable<string> links,
+        string destinationDirectory)
         {
-            foreach (string link in links)
+            foreach (var link in links)
             {
                 var destinationPath = await _rfClient.DownloadFile(link, destinationDirectory);
                 ZipFile.ExtractToDirectory(destinationPath, destinationDirectory, Encoding.GetEncoding(28591));

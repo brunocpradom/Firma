@@ -34,15 +34,14 @@ namespace Firma.Managers
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Cnae);
             foreach (var record in _cnaeCsvParser.ProcessCsv<CnaeCsvDto>(destinationDirectory))
             {
-                var cnae = await _context.Cnae.FirstOrDefaultAsync(c => c.Code == record.Code);
-                if (cnae is null)
+                if (!await _context.Cnae.AnyAsync(c => c.Code == record.Code))
                 {
                     _context.Cnae.Add(
                         new Cnae() { Code = record.Code, Description = record.Description }
                         );
-                    await _context.SaveChangesAsync();
                 }
             }
+            await _context.SaveChangesAsync();
             _receitaFederal.DeleteFiles(destinationDirectory);
         }
     }
