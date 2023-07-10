@@ -19,19 +19,17 @@ namespace Firma.Tests.Integration.Specs.Managers
         [Test]
         public async Task ImportDataTest()
         {
-            ReceitaFederalClientMock rfClientMock = new();
-            ReceitaFederalClient rfClient = rfClientMock.MockDownloadFile("Municipios.zip");
-            ReceitaFederalService rfService = new(rfClient);
+            CreateDownloadFileStub("Municipios.zip");
             var loggerCsvParser = Mock.Of<ILogger<CsvParserService>>();
-            CsvParserService cnaeParser = new(loggerCsvParser);
             var loggerCityManager = Mock.Of<ILogger<CityManager>>();
-            var mockSet = new Mock<DbSet<City>>();
+
+            ReceitaFederalService rfService = new(receitaFederalClientMock());
+            CsvParserService cnaeParser = new(loggerCsvParser);
+
             CityManager cityManager = new(_dbContext, cnaeParser, rfService, loggerCityManager);
+
             await cityManager.ImportData();
-            //var city = await _dbContext.City.FirstOrDefaultAsync(c => c.Code == "0001");
-            var city = await _dbContext.City.AnyAsync();
-            Console.WriteLine("city");
-            Console.WriteLine(city);
+            var city = await _dbContext.City.FirstOrDefaultAsync(c => c.Code == "0001");
         }
     }
 }
