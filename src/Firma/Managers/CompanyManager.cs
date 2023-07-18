@@ -39,7 +39,7 @@ namespace Firma.Managers
         {
             _logger.LogInformation("Creating Company.");
             var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.LegalNature);
-            var qualificationOfPersonInCharge = await _context.QualificationOfPersonInCharge.FirstOrDefaultAsync(q => q.Code == record.QualificationOfPersonInCharge);
+            var qualificationOfPersonInCharge = await _context.Qualification.FirstOrDefaultAsync(q => q.Code == record.QualificationOfPersonInCharge);
             var company = new Company()
             {
                 BasicTaxId = record.BasicTaxId,

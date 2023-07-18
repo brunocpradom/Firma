@@ -35,6 +35,7 @@ namespace Firma.Managers
             var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
             var qualification = await _context.Qualification.FirstAsync(q => q.Code == record.Qualification);
             var country = await _context.Country.FirstAsync(c => c.Code == record.Country);
+            var representativeQualification = await _context.Qualification.FirstAsync(q => q.Code == record.RepresentativeQualification);
             Partner partner = new()
             {
                 Company = company,
@@ -47,7 +48,7 @@ namespace Firma.Managers
                 Country = country,
                 LegalRepresentative = record.LegalRepresentative,
                 RepresentativeName = record.RepresentativeName,
-                RepresentativeQualification = record.RepresentativeQualification
+                RepresentativeQualification = representativeQualification
             };
             _context.Add(partner);
             await _context.SaveChangesAsync();
