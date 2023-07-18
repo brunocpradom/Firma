@@ -16,11 +16,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<CadastralSituationReasonManager> _logger;
 
         public ManagerName Name => ManagerName.CadastralSituationReason;
 
-        public CadastralSituationReasonManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public CadastralSituationReasonManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CadastralSituationReasonManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

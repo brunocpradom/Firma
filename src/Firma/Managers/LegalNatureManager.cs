@@ -16,11 +16,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<LegalNatureManager> _logger;
 
         public ManagerName Name => ManagerName.LegalNature;
 
-        public LegalNatureManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public LegalNatureManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<LegalNatureManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

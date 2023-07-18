@@ -19,11 +19,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<CompanyManager> _logger;
 
         public ManagerName Name => ManagerName.Company;
 
-        public CompanyManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public CompanyManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CompanyManager> logger)
         {
             _context = context;
             _csvParser = csvParser;
@@ -39,17 +39,17 @@ namespace Firma.Managers
         {
             _logger.LogInformation("Creating Company.");
             var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.LegalNature);
+            var qualificationOfPersonInCharge = await _context.QualificationOfPersonInCharge.FirstOrDefaultAsync(q => q.Code == record.QualificationOfPersonInCharge);
             var company = new Company()
             {
                 BasicTaxId = record.BasicTaxId,
                 RegisteredName = record.RegisteredName,
                 LegalNature = legalNature!,
                 ShareCapital = record.ShareCapital,
-                CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), record.CompanySize!),
+                CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), int.Parse(record.CompanySize!)),
                 TaxRegime = new TaxRegime() { },
                 ResponsibleFederalEntity = record.ResponsibleFederalEntity,
-                QualificationOfPersonInCharge = (QualificationOfPersonInCharge)Enum.ToObject(typeof(QualificationOfPersonInCharge), record.QualificationOfPersonInCharge!)
-
+                QualificationOfPersonInCharge = qualificationOfPersonInCharge,
             };
             _context.Add(company);
             await _context.SaveChangesAsync();

@@ -16,11 +16,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<CountryManager> _logger;
 
         public ManagerName Name => ManagerName.Country;
 
-        public CountryManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public CountryManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CountryManager> logger)
         {
             _context = context;
             _csvParser = csvParser;
@@ -42,7 +42,7 @@ namespace Firma.Managers
                 Name = record.Description
             };
             _context.Add(country);
-            await _context.SaveChangesAsync();
+
         }
 
         public async Task ImportData()
@@ -50,12 +50,12 @@ namespace Firma.Managers
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Pais);
             foreach (var record in _csvParser.ProcessCsv<CountryCsvDto>(destinationDirectory))
             {
-                var country = await _context.Country.FirstOrDefaultAsync(c => c.Code == record.Code);
-                if (country is null)
+                if (!await _context.Country.AnyAsync(c => c.Code == record.Code))
                     await Create(record);
                 else
                     await Update(record);
             }
+            await _context.SaveChangesAsync();
             _receitaFederal.DeleteFiles(destinationDirectory);
         }
     }
