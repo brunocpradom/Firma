@@ -33,6 +33,7 @@ namespace Firma.Services
                 {
                     HasHeaderRecord = false,
                     Delimiter = ";",
+                    MissingFieldFound = null
                 };
                 using (var reader = new StreamReader(file, Encoding.GetEncoding(28591)))
                 {
