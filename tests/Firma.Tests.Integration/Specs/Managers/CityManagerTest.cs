@@ -7,6 +7,7 @@ using Firma.Models.Values.Contact;
 using Firma.Services;
 using Firma.Tests.Common.TestUtils;
 using Firma.Tests.Integration.Fixtures;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -20,16 +21,13 @@ namespace Firma.Tests.Integration.Specs.Managers
         public async Task ImportDataTest()
         {
             CreateDownloadFileStub("Municipios.zip");
-            var loggerCsvParser = Mock.Of<ILogger<CsvParserService>>();
             var loggerCityManager = Mock.Of<ILogger<CityManager>>();
-
-            ReceitaFederalService rfService = new(receitaFederalClientMock());
-            CsvParserService cnaeParser = new(loggerCsvParser);
-
-            CityManager cityManager = new(_dbContext, cnaeParser, rfService, loggerCityManager);
-
+            CityManager cityManager = new(_dbContext, csvParserServiceMock, receitaFederalServiceMock, loggerCityManager);
             await cityManager.ImportData();
+
             var city = await _dbContext.City.FirstOrDefaultAsync(c => c.Code == "0001");
+            city!.Code.Should().Be("0001");
+            city!.Name.Should().Be("GUAJARA-MIRIM");
         }
     }
 }

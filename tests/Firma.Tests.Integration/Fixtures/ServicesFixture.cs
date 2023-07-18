@@ -28,5 +28,15 @@ namespace Firma.Tests.Integration.Fixtures
             ReceitaFederalClient rfClient = new(loggerRfClient, httpClient, mockConfiguration);
             return rfClient;
         }
+
+        public CsvParserService mockParserServiceMock()
+        {
+            var loggerCsvParser = Mock.Of<ILogger<CsvParserService>>();
+            CsvParserService csvParserService = new(loggerCsvParser);
+            return csvParserService;
+        }
+        public CsvParserService csvParserServiceMock => mockParserServiceMock();
+
+        public ReceitaFederalService receitaFederalServiceMock => new(receitaFederalClientMock());
     }
 }
