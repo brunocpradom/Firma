@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Firma.Models.Values.Partner
+namespace Firma.Models.Values
 {
     public class Qualification
     {

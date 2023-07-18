@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Firma.Models.Values;
 using Firma.Models.Values.Contact;
 using Firma.Models.Values.Partner;
 
@@ -20,7 +21,7 @@ namespace Firma.Models.Entities
         public Country? Country { get; set; }
         public string LegalRepresentative { get; set; } = String.Empty;
         public string RepresentativeName { get; set; } = String.Empty;
-        public string RepresentativeQualification { get; set; } = String.Empty;
+        public Qualification? RepresentativeQualification { get; set; }
 
     }
 }

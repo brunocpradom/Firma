@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Firma.Models.Entities;
+using Firma.Models.Values;
 using Firma.Models.Values.Companies;
 using Firma.Models.Values.Contact;
 using Firma.Models.Values.Legal;
@@ -29,9 +30,8 @@ namespace Firma.Data
         public DbSet<Email> Email => Set<Email>();
         public DbSet<Cnae> Characters => Set<Cnae>();
         public DbSet<Telephone> Telephone => Set<Telephone>();
-        public DbSet<CadastralSituation> CadastralSituation => Set<CadastralSituation>();  
-        public DbSet<LegalNature> LegalNature => Set<LegalNature>(); 
-        public DbSet<Qualification> Qualification => Set<Qualification>(); 
+        public DbSet<CadastralSituation> CadastralSituation => Set<CadastralSituation>();
+        public DbSet<LegalNature> LegalNature => Set<LegalNature>();
         public DbSet<Lucro> Lucro => Set<Lucro>();
         public DbSet<Mei> Mei => Set<Mei>();
         public DbSet<Simples> Simples => Set<Simples>();
@@ -39,5 +39,7 @@ namespace Firma.Data
         public DbSet<MainCnae> MainCnae => Set<MainCnae>();
         public DbSet<SecondaryCnaes> SecondaryCnaes => Set<SecondaryCnaes>();
         public DbSet<CadastralSituationReason> CadastralSituationReason => Set<CadastralSituationReason>();
+        public DbSet<Qualification> Qualification => Set<Qualification>();
+
     }
 }

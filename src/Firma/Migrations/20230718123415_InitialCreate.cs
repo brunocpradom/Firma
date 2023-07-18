@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Firma.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -186,7 +186,7 @@ namespace Firma.Migrations
                     share_capital = table.Column<int>(type: "integer", nullable: false),
                     company_size = table.Column<int>(type: "integer", nullable: false),
                     responsible_federal_entity = table.Column<string>(type: "text", nullable: true),
-                    qualification_of_person_in_charge = table.Column<int>(type: "integer", nullable: true)
+                    qualification_of_person_in_charge_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,6 +197,11 @@ namespace Firma.Migrations
                         principalTable: "legal_nature",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_company_qualification_qualification_of_person_in_charge_id",
+                        column: x => x.qualification_of_person_in_charge_id,
+                        principalTable: "qualification",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -235,7 +240,7 @@ namespace Firma.Migrations
                     country_id = table.Column<int>(type: "integer", nullable: true),
                     legal_representative = table.Column<string>(type: "text", nullable: false),
                     representative_name = table.Column<string>(type: "text", nullable: false),
-                    representative_qualification = table.Column<string>(type: "text", nullable: false)
+                    representative_qualification_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -254,6 +259,11 @@ namespace Firma.Migrations
                     table.ForeignKey(
                         name: "fk_partner_qualification_qualification_id",
                         column: x => x.qualification_id,
+                        principalTable: "qualification",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_partner_qualification_representative_qualification_id",
+                        column: x => x.representative_qualification_id,
                         principalTable: "qualification",
                         principalColumn: "id");
                 });
@@ -466,6 +476,11 @@ namespace Firma.Migrations
                 column: "legal_nature_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_company_qualification_of_person_in_charge_id",
+                table: "company",
+                column: "qualification_of_person_in_charge_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_email_establishment_id",
                 table: "email",
                 column: "establishment_id");
@@ -516,6 +531,11 @@ namespace Firma.Migrations
                 column: "qualification_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_partner_representative_qualification_id",
+                table: "partner",
+                column: "representative_qualification_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_tax_regime_company_id",
                 table: "tax_regime",
                 column: "company_id",
@@ -564,9 +584,6 @@ namespace Firma.Migrations
                 name: "cadastral_situation_reason");
 
             migrationBuilder.DropTable(
-                name: "qualification");
-
-            migrationBuilder.DropTable(
                 name: "lucro");
 
             migrationBuilder.DropTable(
@@ -595,6 +612,9 @@ namespace Firma.Migrations
 
             migrationBuilder.DropTable(
                 name: "legal_nature");
+
+            migrationBuilder.DropTable(
+                name: "qualification");
 
             migrationBuilder.DropTable(
                 name: "cnae");

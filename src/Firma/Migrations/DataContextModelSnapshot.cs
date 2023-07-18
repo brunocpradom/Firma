@@ -44,9 +44,9 @@ namespace Firma.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("legal_nature_id");
 
-                    b.Property<int?>("QualificationOfPersonInCharge")
+                    b.Property<int?>("QualificationOfPersonInChargeId")
                         .HasColumnType("integer")
-                        .HasColumnName("qualification_of_person_in_charge");
+                        .HasColumnName("qualification_of_person_in_charge_id");
 
                     b.Property<string>("RegisteredName")
                         .IsRequired()
@@ -66,6 +66,9 @@ namespace Firma.Migrations
 
                     b.HasIndex("LegalNatureId")
                         .HasDatabaseName("ix_company_legal_nature_id");
+
+                    b.HasIndex("QualificationOfPersonInChargeId")
+                        .HasDatabaseName("ix_company_qualification_of_person_in_charge_id");
 
                     b.ToTable("company", (string)null);
                 });
@@ -190,10 +193,9 @@ namespace Firma.Migrations
                         .HasColumnType("text")
                         .HasColumnName("representative_name");
 
-                    b.Property<string>("RepresentativeQualification")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("representative_qualification");
+                    b.Property<int?>("RepresentativeQualificationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("representative_qualification_id");
 
                     b.HasKey("Id")
                         .HasName("pk_partner");
@@ -206,6 +208,9 @@ namespace Firma.Migrations
 
                     b.HasIndex("QualificationId")
                         .HasDatabaseName("ix_partner_qualification_id");
+
+                    b.HasIndex("RepresentativeQualificationId")
+                        .HasDatabaseName("ix_partner_representative_qualification_id");
 
                     b.ToTable("partner", (string)null);
                 });
@@ -554,7 +559,7 @@ namespace Firma.Migrations
                     b.ToTable("secondary_cnaes", (string)null);
                 });
 
-            modelBuilder.Entity("Firma.Models.Values.Partner.Qualification", b =>
+            modelBuilder.Entity("Firma.Models.Values.Qualification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -719,7 +724,14 @@ namespace Firma.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_company_legal_nature_legal_nature_id");
 
+                    b.HasOne("Firma.Models.Values.Qualification", "QualificationOfPersonInCharge")
+                        .WithMany()
+                        .HasForeignKey("QualificationOfPersonInChargeId")
+                        .HasConstraintName("fk_company_qualification_qualification_of_person_in_charge_id");
+
                     b.Navigation("LegalNature");
+
+                    b.Navigation("QualificationOfPersonInCharge");
                 });
 
             modelBuilder.Entity("Firma.Models.Entities.Establishment", b =>
@@ -778,16 +790,23 @@ namespace Firma.Migrations
                         .HasForeignKey("CountryId")
                         .HasConstraintName("fk_partner_country_country_id");
 
-                    b.HasOne("Firma.Models.Values.Partner.Qualification", "Qualification")
+                    b.HasOne("Firma.Models.Values.Qualification", "Qualification")
                         .WithMany()
                         .HasForeignKey("QualificationId")
                         .HasConstraintName("fk_partner_qualification_qualification_id");
+
+                    b.HasOne("Firma.Models.Values.Qualification", "RepresentativeQualification")
+                        .WithMany()
+                        .HasForeignKey("RepresentativeQualificationId")
+                        .HasConstraintName("fk_partner_qualification_representative_qualification_id");
 
                     b.Navigation("Company");
 
                     b.Navigation("Country");
 
                     b.Navigation("Qualification");
+
+                    b.Navigation("RepresentativeQualification");
                 });
 
             modelBuilder.Entity("Firma.Models.Values.Contact.Address", b =>
