@@ -19,7 +19,7 @@ namespace Firma.Dtos.Csv
         [Index(4)]
         public required string Qualification { get; set; }
         [Index(5)]
-        public DateOnly CompanyJoiningDate { get; set; }
+        public string CompanyJoiningDate { get; set; } = String.Empty;
         [Index(6)]
         public required string Country { get; set; }
         [Index(7)]
