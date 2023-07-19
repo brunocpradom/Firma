@@ -9,7 +9,7 @@ namespace Firma.Models.Values.TaxationModel
     {
         public int Id { get; set; }
         public bool Opting { get; set; }
-        public DateOnly InclusionDate { get; set; }
-        public DateOnly ExclusionDate { get; set; }
+        public DateOnly? InclusionDate { get; set; }
+        public DateOnly? ExclusionDate { get; set; }
     }
 }

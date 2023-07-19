@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Firma.Data;
 using Firma.Dtos.Csv;
 using Firma.Models;
+using Firma.Models.Entities;
 using Firma.Models.Values.TaxationModel;
 using Firma.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace Firma.Managers
 {
     public class SimplesManager : IManager
     {
+        public Company? company { get; set; }
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
@@ -32,14 +34,21 @@ namespace Firma.Managers
         {
             throw new NotImplementedException();
         }
+        private DateOnly? parseDate(string date)
+        {
+            if (int.Parse(date) == 0)
+                return null;
+            return DateOnly.ParseExact(date, "yyyyMMdd");
+        }
         private Simples CreateSimples(SimplesCsvDto record)
         {
             _logger.LogInformation("Creating Simples");
+
             Simples simples = new()
             {
                 Opting = record.OptionForSimple == "S" ? true : false, // aqui tem opção em branco q significa outros
-                InclusionDate = record.OptionForSimpleInclusionDate,
-                ExclusionDate = record.OptionForSimpleExclusionDate
+                InclusionDate = parseDate(record.OptionForSimpleInclusionDate!),
+                ExclusionDate = parseDate(record.OptionForSimpleExclusionDate!),
             };
             return simples;
         }
@@ -49,32 +58,26 @@ namespace Firma.Managers
             Mei mei = new()
             {
                 Opting = record.OptionForSimple == "S" ? true : false, // aqui tem opção em branco q significa outros
-                InclusionDate = record.OptionForSimpleInclusionDate,
-                ExclusionDate = record.OptionForSimpleExclusionDate
+                InclusionDate = parseDate(record.OptionForMeiInclusionDate!),
+                ExclusionDate = parseDate(record.OptionForMeiExclusionDate!),
             };
             return mei;
         }
 
         private async Task Create(SimplesCsvDto record)
         {
-            var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
-
             Simples? simples = null;
             Mei? mei = null;
-
-            if (company.TaxRegime.Simples is null)
+            if (company!.TaxRegime.Simples is null)
             {
                 simples = CreateSimples(record);
             }
-
             if (company.TaxRegime.Mei is null)
             {
                 mei = CreateMei(record);
             }
-
             company.TaxRegime.Simples = simples;
             company.TaxRegime.Mei = mei;
-            _context.Add(company);
             await _context.SaveChangesAsync();
         }
 
@@ -83,7 +86,9 @@ namespace Firma.Managers
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Simples);
             foreach (var record in _csvParser.ProcessCsv<SimplesCsvDto>(destinationDirectory))
             {
-                var company = await _context.Company.FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
+                company = await _context.Company
+                    .Include(c => c.TaxRegime)
+                    .FirstAsync(c => c.BasicTaxId == record.BasicTaxId);
 
                 if (company.TaxRegime.Simples is null)
                     await Create(record);
