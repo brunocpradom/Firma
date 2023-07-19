@@ -13,14 +13,14 @@ namespace Firma.Dtos.Csv
         [Index(1)]
         public string? OptionForSimple { get; set; }
         [Index(2)]
-        public DateOnly OptionForSimpleInclusionDate { get; set; }
+        public string? OptionForSimpleInclusionDate { get; set; }
         [Index(3)]
-        public DateOnly OptionForSimpleExclusionDate { get; set; }
+        public string? OptionForSimpleExclusionDate { get; set; }
         [Index(4)]
         public string? OptionForMei { get; set; }
         [Index(5)]
-        public DateOnly OptionForMeiInclusionDate { get; set; }
+        public string? OptionForMeiInclusionDate { get; set; }
         [Index(6)]
-        public DateOnly OptionForMeiExclusionDate { get; set; }
+        public string? OptionForMeiExclusionDate { get; set; }
     }
 }
