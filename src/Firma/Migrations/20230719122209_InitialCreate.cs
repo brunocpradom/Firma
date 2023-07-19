@@ -91,8 +91,8 @@ namespace Firma.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     opting = table.Column<bool>(type: "boolean", nullable: false),
-                    inclusion_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    exclusion_date = table.Column<DateOnly>(type: "date", nullable: false)
+                    inclusion_date = table.Column<DateOnly>(type: "date", nullable: true),
+                    exclusion_date = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,8 +132,8 @@ namespace Firma.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     opting = table.Column<bool>(type: "boolean", nullable: false),
-                    inclusion_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    exclusion_date = table.Column<DateOnly>(type: "date", nullable: false)
+                    inclusion_date = table.Column<DateOnly>(type: "date", nullable: true),
+                    exclusion_date = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {

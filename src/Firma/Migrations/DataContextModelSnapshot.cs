@@ -626,11 +626,11 @@ namespace Firma.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("ExclusionDate")
+                    b.Property<DateOnly?>("ExclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("exclusion_date");
 
-                    b.Property<DateOnly>("InclusionDate")
+                    b.Property<DateOnly?>("InclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("inclusion_date");
 
@@ -653,11 +653,11 @@ namespace Firma.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("ExclusionDate")
+                    b.Property<DateOnly?>("ExclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("exclusion_date");
 
-                    b.Property<DateOnly>("InclusionDate")
+                    b.Property<DateOnly?>("InclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("inclusion_date");
 

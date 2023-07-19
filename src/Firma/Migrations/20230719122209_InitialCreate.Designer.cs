@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Firma.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230718123415_InitialCreate")]
+    [Migration("20230719122209_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -629,11 +629,11 @@ namespace Firma.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("ExclusionDate")
+                    b.Property<DateOnly?>("ExclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("exclusion_date");
 
-                    b.Property<DateOnly>("InclusionDate")
+                    b.Property<DateOnly?>("InclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("inclusion_date");
 
@@ -656,11 +656,11 @@ namespace Firma.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("ExclusionDate")
+                    b.Property<DateOnly?>("ExclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("exclusion_date");
 
-                    b.Property<DateOnly>("InclusionDate")
+                    b.Property<DateOnly?>("InclusionDate")
                         .HasColumnType("date")
                         .HasColumnName("inclusion_date");
 
