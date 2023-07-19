@@ -15,10 +15,10 @@ namespace Firma.Models.Entities
         public required string TaxId { get; set; }
         public required Identifier Identifier { get; set; }
         public string? TradeName { get; set; }
-        public DateOnly ActivityStartDate { get; set; }
+        public DateOnly? ActivityStartDate { get; set; }
         public required CadastralSituation CadastralSituation { get; set; }
         public required MainCnae MainCnae { get; set; }
-        public SecondaryCnaes? SecondaryCnaes { get; set; } 
+        public SecondaryCnaes? SecondaryCnaes { get; set; }
         public required Address Address { get; set; }
         public List<Telephone>? Telephone { get; set; }
         public List<Email>? Email { get; set; }
