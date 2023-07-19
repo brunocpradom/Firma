@@ -19,11 +19,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<EstablishmentsManager> _logger;
 
         public ManagerName Name => ManagerName.Establishment;
 
-        public EstablishmentsManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public EstablishmentsManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<EstablishmentsManager> logger)
         {
             _context = context;
             _csvParser = csvParser;
@@ -35,16 +35,22 @@ namespace Firma.Managers
         {
             throw new NotImplementedException();
         }
+        private DateOnly? parseDate(string date)
+        {
+            if (string.IsNullOrWhiteSpace(date))
+                return null;
+            return DateOnly.ParseExact(date, "yyyyMMdd");
+        }
         private async Task<CadastralSituation> CreateCadastralSituation(EstablishmentCsvDto record)
         {
             CadastralSituationReason reason = await _context.CadastralSituationReason.FirstAsync(r => r.Code == record.CadastralSituationReason);
             CadastralSituation cadastralSituation = new()
             {
-                Situation = (CadastralSituationCode)Enum.ToObject(typeof(CadastralSituationCode), record.CadastralSituation),
-                CadastralSituationDate = record.CadastralSituationDate,
+                Situation = (CadastralSituationCode)Enum.ToObject(typeof(CadastralSituationCode), int.Parse(record.CadastralSituation)),
+                CadastralSituationDate = parseDate(record.CadastralSituationDate),
                 CadastralSituationReason = reason,
                 SpecialSituation = record.SpecialSituation,
-                SpecialSituationDate = record.SpecialSituationDate,
+                SpecialSituationDate = parseDate(record.SpecialSituationDate),
             };
             return cadastralSituation;
         }
@@ -52,7 +58,11 @@ namespace Firma.Managers
         private async Task<Address> CreateAddress(EstablishmentCsvDto record)
         {
             var city = await _context.City.FirstAsync(c => c.Code == record.City);
-            var country = await _context.Country.FirstAsync(c => c.Code == record.Country);
+            var country = await _context.Country.FirstOrDefaultAsync(c => c.Code == record.Country);
+            if (country is null)
+            {
+                country = await _context.Country.FirstAsync(c => c.Code == "105"); // Brazil
+            }
             Address address = new()
             {
                 ForeignCityName = record.ForeignCityName,
@@ -114,9 +124,9 @@ namespace Firma.Managers
             {
                 Company = company,
                 TaxId = $"{record.BasicTaxId}{record.OrderTaxId}{record.DVTaxId}",
-                Identifier = (Identifier)Enum.ToObject(typeof(Identifier), record.Identifier),
+                Identifier = (Identifier)Enum.ToObject(typeof(Identifier), int.Parse(record.Identifier)),
                 TradeName = record.TradeName,
-                ActivityStartDate = record.ActivityStartDate,
+                ActivityStartDate = parseDate(record.ActivityStartDate),
                 CadastralSituation = cadastralSituation,
                 MainCnae = mainCnae,
                 SecondaryCnaes = record.SecondaryCnae is not null ? secondaryCnae : null,
