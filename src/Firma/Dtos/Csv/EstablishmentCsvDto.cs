@@ -21,7 +21,7 @@ namespace Firma.Dtos.Csv
         [Index(5)]
         public string CadastralSituation { get; set; } = string.Empty;
         [Index(6)]
-        public DateOnly  CadastralSituationDate { get; set; }
+        public string CadastralSituationDate { get; set; } = string.Empty;
         [Index(7)]
         public string CadastralSituationReason { get; set; } = string.Empty;
         [Index(8)]
@@ -29,7 +29,7 @@ namespace Firma.Dtos.Csv
         [Index(9)]
         public string Country { get; set; } = string.Empty;
         [Index(10)]
-        public DateOnly ActivityStartDate { get; set; }
+        public string ActivityStartDate { get; set; } = string.Empty;
         [Index(11)]
         public required string MainCnae { get; set; }
         [Index(12)]
@@ -67,6 +67,6 @@ namespace Firma.Dtos.Csv
         [Index(28)]
         public string SpecialSituation { get; set; } = string.Empty;
         [Index(29)]
-        public DateOnly SpecialSituationDate { get; set; }
+        public string SpecialSituationDate { get; set; } = string.Empty;
     }
 }
