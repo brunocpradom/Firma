@@ -58,11 +58,8 @@ namespace Firma.Managers
         private async Task<Address> CreateAddress(EstablishmentCsvDto record)
         {
             var city = await _context.City.FirstAsync(c => c.Code == record.City);
-            var country = await _context.Country.FirstOrDefaultAsync(c => c.Code == record.Country);
-            if (country is null)
-            {
-                country = await _context.Country.FirstAsync(c => c.Code == "105"); // Brazil
-            }
+            var countryCode = string.IsNullOrWhiteSpace(record.Country) ? "105" : record.Country;
+            var country = await _context.Country.FirstAsync(c => c.Code == countryCode);
             Address address = new()
             {
                 ForeignCityName = record.ForeignCityName,
