@@ -46,6 +46,26 @@ namespace Firma.Tests.Integration.Fixtures
                     </body></html>
                     """;
         }
+        public string htmlTaxRegimeMock()
+        {
+            return """                 
+                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+                <html>
+                <head>
+                <title>Index of /CNPJ/regime_tributario</title>
+                </head>
+                <body>
+                <h1>Index of /CNPJ/regime_tributario</h1>
+                <table>
+                <tr><th valign="top"><img src="/icons/blank.gif" alt="[ICO]"></th><th><a href="?C=N;O=D">Name</a></th><th><a href="?C=M;O=A">Last modified</a></th><th><a href="?C=S;O=A">Size</a></th><th><a href="?C=D;O=A">Description</a></th></tr>
+                <tr><th colspan="5"><hr></th></tr>
+                <tr><td valign="top"><img src="/icons/back.gif" alt="[PARENTDIR]"></td><td><a href="/CNPJ/">Parent Directory</a>       </td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
+                <tr><td valign="top"><img src="/icons/compressed.gif" alt="[   ]"></td><td><a href="Lucro%20Arbitrado.zip">Lucro Arbitrado.zip</a>    </td><td align="right">2023-02-01 08:50  </td><td align="right"> 51K</td><td>&nbsp;</td></tr>
+                <tr><th colspan="5"><hr></th></tr>
+                </table>
+                </body></html>
+                """;
+        }
         [SetUp]
         public void StartServer()
         {
@@ -75,6 +95,18 @@ namespace Firma.Tests.Integration.Fixtures
                         .WithHeader("Content-Type", "application/octet-stream")
                         .WithHeader("Content-Disposition", "attachment; filename=arquivo.txt")
                         .WithBody(htmlMock())
+                    );
+        }
+        public void CreateGetTaxRegimeLinkStub()
+        {
+            server
+                .Given(Request.Create().WithPath("/CNPJ/regime_tributario/").UsingGet())
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(200)
+                        .WithHeader("Content-Type", "application/octet-stream")
+                        .WithHeader("Content-Disposition", "attachment; filename=arquivo.txt")
+                        .WithBody(htmlTaxRegimeMock())
                     );
         }
         public void CreateDownloadFileStub(string fileName)
