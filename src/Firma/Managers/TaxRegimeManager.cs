@@ -18,11 +18,11 @@ namespace Firma.Managers
         private DataContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
-        private ILogger<ReceitaFederalClient> _logger;
+        private ILogger<TaxRegimeManager> _logger;
 
         public ManagerName Name => ManagerName.TaxRegime;
 
-        public TaxRegimeManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<ReceitaFederalClient> logger)
+        public TaxRegimeManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<TaxRegimeManager> logger)
         {
             _context = context;
             _csvParser = csvParser;
@@ -55,7 +55,6 @@ namespace Firma.Managers
                 AmountOfBookKeeping = record.AmountOfBookkeeping
             };
             company.TaxRegime.Lucro = lucro;
-            _context.Add(company);
             await _context.SaveChangesAsync();
         }
 
@@ -65,7 +64,7 @@ namespace Firma.Managers
         {
             _logger.LogInformation("Importing TaxRegime Data");
             var destinationDirectory = await _receitaFederal.TaxRegimeDownload(DownloadTarget.Natureza);
-            foreach (var record in _csvParser.ProcessCsv<LucroCsvDto>(destinationDirectory))
+            foreach (var record in _csvParser.ProcessCsvWithHeaders<LucroCsvDto>(destinationDirectory))
             {
                 Company company = await GetCompany(record);
                 if (company.TaxRegime.Lucro is null)
@@ -73,6 +72,7 @@ namespace Firma.Managers
                 else
                     await Update(record);
             }
+            _receitaFederal.DeleteFiles(destinationDirectory);
         }
     }
 }
