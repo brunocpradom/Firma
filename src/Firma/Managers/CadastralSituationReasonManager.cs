@@ -13,14 +13,14 @@ namespace Firma.Managers
 {
     public class CadastralSituationReasonManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<CadastralSituationReasonManager> _logger;
 
         public ManagerName Name => ManagerName.CadastralSituationReason;
 
-        public CadastralSituationReasonManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CadastralSituationReasonManager> logger)
+        public CadastralSituationReasonManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CadastralSituationReasonManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

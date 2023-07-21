@@ -13,14 +13,14 @@ namespace Firma.Managers
 {
     public class CnaeManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _cnaeCsvParser;
         private IReceitaFederalService _receitaFederal;
         private readonly ILogger<CnaeManager> _logger;
 
         public ManagerName Name => ManagerName.Cnae;
 
-        public CnaeManager(DataContext context, ICsvParserService cnaeCsvParser, IReceitaFederalService receitaFederal, ILogger<CnaeManager> logger)
+        public CnaeManager(AppDbContext context, ICsvParserService cnaeCsvParser, IReceitaFederalService receitaFederal, ILogger<CnaeManager> logger)
         {
             _context = context;
             _cnaeCsvParser = cnaeCsvParser;

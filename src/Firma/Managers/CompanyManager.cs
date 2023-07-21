@@ -16,14 +16,14 @@ namespace Firma.Managers
 {
     public class CompanyManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<CompanyManager> _logger;
 
         public ManagerName Name => ManagerName.Company;
 
-        public CompanyManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CompanyManager> logger)
+        public CompanyManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CompanyManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

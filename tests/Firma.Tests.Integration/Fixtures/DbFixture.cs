@@ -10,20 +10,20 @@ namespace Firma.Tests.Integration.Fixtures
 {
     public class DbFixture : ApiFixture
     {
-        protected DataContext _dbContext = null!;
+        protected AppDbContext _dbContext = null!;
         private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
             .WithImage("postgres:latest")
             .Build();
 
-        private DataContext CreateDbContext()
+        private AppDbContext CreateDbContext()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder
                 .UseSnakeCaseNamingConvention()
                 .UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=postgres;Database=integration_test_db",
                                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
-            DataContext dbContext = new(optionsBuilder.Options);
+            AppDbContext dbContext = new(optionsBuilder.Options);
             return dbContext;
         }
 

@@ -14,14 +14,14 @@ namespace Firma.Managers
 {
     public class PartnersManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<PartnersManager> _logger;
 
         public ManagerName Name => ManagerName.Partner;
 
-        public PartnersManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<PartnersManager> logger)
+        public PartnersManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<PartnersManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

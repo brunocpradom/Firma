@@ -15,14 +15,14 @@ namespace Firma.Managers
     public class SimplesManager : IManager
     {
         public Company? company { get; set; }
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<SimplesManager> _logger;
 
         public ManagerName Name => ManagerName.Simples;
 
-        public SimplesManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<SimplesManager> logger)
+        public SimplesManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<SimplesManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

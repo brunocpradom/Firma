@@ -1,0 +1,20 @@
+# Estágio 1: Etapa de construção para criar a imagem de compilação
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+
+# Copiar os arquivos do projeto para o contêiner
+COPY src/Firma/Firma.csproj .
+RUN dotnet restore
+
+# Copiar todo o código-fonte para o contêiner
+COPY src/Firma/ .
+RUN dotnet build --no-restore -c Release
+
+# Publicar o projeto
+RUN dotnet publish -c Release -o /app --no-restore
+
+# Estágio 2: Etapa de execução para criar a imagem final e executar a aplicação
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "Firma.dll"]

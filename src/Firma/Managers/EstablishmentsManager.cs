@@ -16,14 +16,14 @@ namespace Firma.Managers
 {
     public class EstablishmentsManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<EstablishmentsManager> _logger;
 
         public ManagerName Name => ManagerName.Establishment;
 
-        public EstablishmentsManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<EstablishmentsManager> logger)
+        public EstablishmentsManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<EstablishmentsManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

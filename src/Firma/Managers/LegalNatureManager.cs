@@ -13,14 +13,14 @@ namespace Firma.Managers
 {
     public class LegalNatureManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<LegalNatureManager> _logger;
 
         public ManagerName Name => ManagerName.LegalNature;
 
-        public LegalNatureManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<LegalNatureManager> logger)
+        public LegalNatureManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<LegalNatureManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

@@ -14,14 +14,14 @@ namespace Firma.Managers
 {
     public class QualificationManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<QualificationManager> _logger;
 
         public ManagerName Name => ManagerName.Qualification;
 
-        public QualificationManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<QualificationManager> logger)
+        public QualificationManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<QualificationManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

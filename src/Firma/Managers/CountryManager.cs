@@ -13,14 +13,14 @@ namespace Firma.Managers
 {
     public class CountryManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<CountryManager> _logger;
 
         public ManagerName Name => ManagerName.Country;
 
-        public CountryManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CountryManager> logger)
+        public CountryManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<CountryManager> logger)
         {
             _context = context;
             _csvParser = csvParser;

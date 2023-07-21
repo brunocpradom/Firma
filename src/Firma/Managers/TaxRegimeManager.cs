@@ -15,14 +15,14 @@ namespace Firma.Managers
 {
     public class TaxRegimeManager : IManager
     {
-        private DataContext _context;
+        private AppDbContext _context;
         private ICsvParserService _csvParser;
         private IReceitaFederalService _receitaFederal;
         private ILogger<TaxRegimeManager> _logger;
 
         public ManagerName Name => ManagerName.TaxRegime;
 
-        public TaxRegimeManager(DataContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<TaxRegimeManager> logger)
+        public TaxRegimeManager(AppDbContext context, ICsvParserService csvParser, IReceitaFederalService receitaFederal, ILogger<TaxRegimeManager> logger)
         {
             _context = context;
             _csvParser = csvParser;
