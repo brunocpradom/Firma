@@ -50,8 +50,8 @@ namespace Firma.Managers
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Natureza);
             foreach (var record in _csvParser.ProcessCsv<LegalNatureCsvDto>(destinationDirectory))
             {
-                var country = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.Code);
-                if (country is null)
+                var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == record.Code);
+                if (legalNature is null)
                     await Create(record);
                 else
                     await Update(record);

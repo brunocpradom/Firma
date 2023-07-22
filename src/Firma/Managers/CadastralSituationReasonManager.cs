@@ -50,8 +50,8 @@ namespace Firma.Managers
             var destinationDirectory = await _receitaFederal.Download(DownloadTarget.Motivo);
             foreach (var record in _csvParser.ProcessCsv<CadastralSituationReasonDto>(destinationDirectory))
             {
-                var country = await _context.CadastralSituationReason.FirstOrDefaultAsync(c => c.Code == record.Code);
-                if (country is null)
+                var cadastralSituationReason = await _context.CadastralSituationReason.FirstOrDefaultAsync(c => c.Code == record.Code);
+                if (cadastralSituationReason is null)
                     await Create(record);
                 else
                     await Update(record);
