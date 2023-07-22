@@ -43,6 +43,13 @@ namespace Firma.Managers
             var qualification = await _context.Qualification.FirstOrDefaultAsync(q => q.Code == qualificationCode);
             return qualification;
         }
+        private async Task<LegalNature?> GetLegalNature(string legalNatureCode)
+        {
+            if (string.IsNullOrWhiteSpace(legalNatureCode))
+                return null;
+            var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == legalNatureCode);
+            return legalNature!;
+        }
         private async Task Create(CompanyCsvDto record)
         {
             _logger.LogInformation("Creating Company.");
@@ -51,7 +58,7 @@ namespace Firma.Managers
             {
                 BasicTaxId = record.BasicTaxId,
                 RegisteredName = record.RegisteredName,
-                LegalNature = legalNature!,
+                LegalNature = await GetLegalNature(record.LegalNature),
                 ShareCapital = record.ShareCapital,
                 CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), int.Parse(record.CompanySize!)),
                 TaxRegime = new TaxRegime() { },
