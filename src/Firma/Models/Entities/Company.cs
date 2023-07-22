@@ -15,7 +15,7 @@ namespace Firma.Models.Entities
         public required string BasicTaxId { get; set; }
         public required string RegisteredName { get; set; }
         public required LegalNature LegalNature { get; set; }
-        public int ShareCapital { get; set; }
+        public string? ShareCapital { get; set; }
         public required CompanySize CompanySize { get; set; }
         public required TaxRegime TaxRegime { get; set; }
         public string? ResponsibleFederalEntity { get; set; }
