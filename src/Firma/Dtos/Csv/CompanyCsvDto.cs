@@ -17,7 +17,7 @@ namespace Firma.Dtos.Csv
         [Index(3)]
         public string? QualificationOfPersonInCharge { get; set; }
         [Index(4)]
-        public int ShareCapital { get; set; }
+        public string? ShareCapital { get; set; }
         [Index(5)]
         public required string CompanySize { get; set; }
         [Index(6)]
