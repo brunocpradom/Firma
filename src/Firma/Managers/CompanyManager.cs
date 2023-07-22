@@ -67,7 +67,7 @@ namespace Firma.Managers
                 RegisteredName = record.RegisteredName,
                 LegalNature = await GetLegalNature(record.LegalNature),
                 ShareCapital = record.ShareCapital,
-                CompanySize = (CompanySize)Enum.ToObject(typeof(CompanySize), int.Parse(record.CompanySize!)),
+                CompanySize = GetCompanySize(record.CompanySize),
                 TaxRegime = new TaxRegime() { },
                 ResponsibleFederalEntity = record.ResponsibleFederalEntity,
                 QualificationOfPersonInCharge = await GetQualification(record.QualificationOfPersonInCharge),
