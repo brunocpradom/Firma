@@ -50,6 +50,13 @@ namespace Firma.Managers
             var legalNature = await _context.LegalNature.FirstOrDefaultAsync(l => l.Code == legalNatureCode);
             return legalNature!;
         }
+        private CompanySize? GetCompanySize(string? companySizeCode)
+        {
+            if (string.IsNullOrWhiteSpace(companySizeCode))
+                return null;
+            var companySize = (CompanySize)Enum.ToObject(typeof(CompanySize), int.Parse(companySizeCode));
+            return companySize;
+        }
         private async Task Create(CompanyCsvDto record)
         {
             _logger.LogInformation("Creating Company.");
