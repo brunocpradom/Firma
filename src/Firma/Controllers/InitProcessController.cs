@@ -13,10 +13,10 @@ namespace Firma.Controllers
     [Route("empresa")]
     public class InitProcessController : ControllerBase
     {
-        private readonly ILogger<EmpresaController> _logger;
+        private readonly ILogger<InitProcessController> _logger;
         private readonly IEnumerable<IManager> _managers;
 
-        public InitProcessController(ILogger<EmpresaController> logger, IEnumerable<IManager> managers)
+        public InitProcessController(ILogger<InitProcessController> logger, IEnumerable<IManager> managers)
         {
             _logger = logger;
             _managers = managers;
