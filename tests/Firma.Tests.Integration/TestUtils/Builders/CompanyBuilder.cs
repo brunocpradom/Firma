@@ -18,7 +18,7 @@ namespace Firma.Tests.Integration.TestUtils.Builders
             RuleFor(c => c.BasicTaxId, f => f.Random.AlphaNumeric(14));
             RuleFor(c => c.RegisteredName, f => f.Company.CompanyName());
             RuleFor(c => c.LegalNature, f => new LegalNatureBuilder().Generate());
-            RuleFor(c => c.ShareCapital, f => f.Random.Int(0, 100000));
+            RuleFor(c => c.ShareCapital, f => f.Random.String2(10, 10));
             RuleFor(c => c.CompanySize, f => f.Random.Enum<CompanySize>());
             RuleFor(c => c.TaxRegime, f => new TaxRegimeBuilder().Generate());
             RuleFor(c => c.ResponsibleFederalEntity, f => f.Random.String2(10, 10));
@@ -39,7 +39,7 @@ namespace Firma.Tests.Integration.TestUtils.Builders
             RuleFor(c => c.LegalNature, f => legalNature);
             return this;
         }
-        public CompanyBuilder WithShareCapital(int shareCapital)
+        public CompanyBuilder WithShareCapital(string shareCapital)
         {
             RuleFor(c => c.ShareCapital, f => shareCapital);
             return this;
