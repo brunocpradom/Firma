@@ -28,7 +28,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(CityCsvDto record)
+        private void Update(CityCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +54,7 @@ namespace Firma.Managers
                 if (city is null)
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

@@ -28,7 +28,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(CadastralSituationReasonDto record)
+        private void Update(CadastralSituationReasonDto record)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +54,7 @@ namespace Firma.Managers
                 if (cadastralSituationReason is null)
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

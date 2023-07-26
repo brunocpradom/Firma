@@ -31,7 +31,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(EstablishmentCsvDto record)
+        private void Update(EstablishmentCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -150,7 +150,7 @@ namespace Firma.Managers
                 }
                 else
                 {
-                    await Update(record);
+                    Update(record);
                 }
             }
             _receitaFederal.DeleteFiles(destinationDirectory);

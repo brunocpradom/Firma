@@ -28,7 +28,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(CountryCsvDto record)
+        private void Update(CountryCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +53,7 @@ namespace Firma.Managers
                 if (!await _context.Country.AnyAsync(c => c.Code == record.Code))
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             await _context.SaveChangesAsync();
             _receitaFederal.DeleteFiles(destinationDirectory);

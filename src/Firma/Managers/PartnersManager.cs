@@ -55,7 +55,7 @@ namespace Firma.Managers
             await _context.SaveChangesAsync();
         }
 
-        private async Task Update(PartnerCsvDto record)
+        private void Update(PartnerCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -72,7 +72,7 @@ namespace Firma.Managers
                 }
                 else
                 {
-                    await Update(record);
+                    Update(record);
                 }
             }
             _receitaFederal.DeleteFiles(destinationDirectory);

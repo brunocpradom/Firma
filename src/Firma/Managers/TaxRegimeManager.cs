@@ -38,7 +38,7 @@ namespace Firma.Managers
             return company;
         }
 
-        private async Task Update(LucroCsvDto record)
+        private void Update(LucroCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +70,7 @@ namespace Firma.Managers
                 if (company.TaxRegime.Lucro is null)
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

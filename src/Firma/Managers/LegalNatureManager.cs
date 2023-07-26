@@ -28,7 +28,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(LegalNatureCsvDto record)
+        private void Update(LegalNatureCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +54,7 @@ namespace Firma.Managers
                 if (legalNature is null)
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }

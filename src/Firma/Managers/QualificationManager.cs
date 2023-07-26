@@ -29,7 +29,7 @@ namespace Firma.Managers
             _logger = logger;
         }
 
-        private async Task Update(QualificationCsvDto record)
+        private void Update(QualificationCsvDto record)
         {
             throw new NotImplementedException();
         }
@@ -55,7 +55,7 @@ namespace Firma.Managers
                 if (qualification is null)
                     await Create(record);
                 else
-                    await Update(record);
+                    Update(record);
             }
             _receitaFederal.DeleteFiles(destinationDirectory);
         }
