@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Firma.Controllers
 {
     [ApiController]
-    [Route("empresa")]
+    [Route("api")]
     public class InitProcessController : ControllerBase
     {
         private readonly ILogger<InitProcessController> _logger;
