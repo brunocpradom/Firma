@@ -1,4 +1,4 @@
-![](https://github.com/brunocpradom/Firma/docs/under_construction.gif)
+![](/docs/under_construction.gif)
 
 # Firma
 
@@ -14,10 +14,16 @@ What do you need to have installed :
 ## 🛫 Run
 
 Build the container image
-`docker compose build`
+
+```
+docker compose build
+```
 
 The command bellow will start the database in docker, apply the migrations and start the api
-`docker compose up`
+
+```
+docker compose up
+```
 
 ## 🧪 Tests
 
